@@ -11,6 +11,8 @@ class BalleTiree(BalleAnimee):
                 self.delta = delta
                 self.rect.y = py+self.delta[1]
                 self.rect.x = px+self.delta[0]
+                self.tps = 0
+                self.timer = True
 
         def existe(self):
                 if self.rect.y <= 0 or self.rect.y >= 510 or self.rect.x <= -10 or self.rect.x >= 650 :

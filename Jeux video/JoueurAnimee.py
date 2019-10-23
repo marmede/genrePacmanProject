@@ -1,5 +1,7 @@
 import pygame
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
+from BalleTiree import BalleTiree
+from Niveau import Niveau
 
 class JoueurAnimee(ElementGraphiqueAnimee):
         def __init__(self,img,x=0,y=0):
@@ -10,36 +12,46 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.cheat = False
                 self.time = 0
                 self.trigger = 0
+                self.timer = False
+                self.tps = 0
                 self.image = img
                 self.numimage = 0
                 self.direction = "debout"
                 self.tire = []
 
-        def Deplacer(self,touches,x,y):
+        def Deplacer(self,touches,x,y, niveau):
                 if touches [pygame.K_UP]:
                         self.direction = "dos"
                         self.numimage += 1
                         self.rect.y -= 12 * self.boost
-                        if self.rect.y <= -12 : 
-                                self.rect.y += 12 * self.boost
+                        if self.rect.y <= -12 :
+
+                        #il faut modifier sa parce que c'est utilisé uniquement dans le cas
+                        #ou le perso se déplace de case en case, sauf que nous faudrait
+                        #plutôt gérer les collisions j'pense
+                                if niveau.structure[niveau.case_y-1][niveau.case_x] != "6":
+                                        self.rect.y += 12 * self.boost
                 elif touches [pygame.K_DOWN]:
                         self.direction = "face"
                         self.numimage += 1
                         self.rect.y += 12 * self.boost
                         if self.rect.y >= y - 90 : #Bas de l'écran
-                                self.rect.y -= 12 * self.boost
+                                if niveau.structure[niveau.case_y+1][niveau.case_x] != "6":
+                                        self.rect.y -= 12 * self.boost
                 elif touches [pygame.K_RIGHT]:
                         self.direction = "droite"
                         self.numimage += 1
                         self.rect.x += 12 * self.boost
                         if self.rect.x >= x - 80: #Côté droit
-                                self.rect.x -= 12 * self.boost
+                                if niveau.structure[niveau.case_y][niveau.case_x+1] != "6":
+                                        self.rect.x -= 12 * self.boost
                 elif touches [pygame.K_LEFT]:
                         self.direction = "gauche"
                         self.numimage += 1
                         self.rect.x -= 12 * self.boost
                         if self.rect.x <= -20 :
-                                self.rect.x += 12 * self.boost
+                                if niveau.structure[niveau.case_y][niveau.case_x-1] != "6":
+                                        self.rect.x += 12 * self.boost
                 else:
                         self.direction = "debout"
 
@@ -116,3 +128,11 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.time = tour + time
                 self.trigger = num
                 return self.time
+
+        def shoot(self, touches, tire, images):
+                if touches[pygame.K_s]:
+                        self.tps += 1
+                        if self.tps == 3:
+                                tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
+                                self.tps = 0
+                return tire, images

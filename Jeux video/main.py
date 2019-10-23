@@ -7,6 +7,7 @@ from JoueurAnimee import JoueurAnimee
 from BalleAnimee import BalleAnimee
 from BonusAnimee import BonusAnimee
 from BalleTiree import BalleTiree
+from Niveau import Niveau
 
 def lireImages():
         
@@ -45,6 +46,8 @@ def lireImages():
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-3.png").convert_alpha())
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-4.png").convert_alpha())
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-5.png").convert_alpha())
+
+        images["mur"] = pygame.image.load("images/lava_ground_cracked_tileset.png").convert_alpha()
         return images
 
 def creerballe(touches):
@@ -54,12 +57,6 @@ def creerballe(touches):
 def creerEnnemies(tour,x):
     if (tour%20) == 0:
         ennemies.append(BalleAnimee(images["balle"],0,-50))
-
-def shoot(touches):
-    if touches[K_s]:
-
-        tire.append(BalleTiree(images["chomp"],perso.setTire(perso.Tire()),perso.rect.x,perso.rect.y))
-
 
 def supprimerElements(tab):
     newTab = []
@@ -84,26 +81,33 @@ fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"],100,100)
 
 game_over = False
+continuer = True
 
 #Tour == variable de temps
 tour = 0
 
 
-while not game_over:
+while continuer:
         tour += 1
         framerate = pygame.time.Clock()
         Fps = framerate.tick(30)
         #Affichage images
         fond.afficher((fenetre))
-        perso.afficher((fenetre))
         #Atribution des touches
         touches = pygame.key.get_pressed()
+        niveau = Niveau("niveau/niveauTest.txt")
+        niveau.generer()
+        niveau.afficher(fenetre, images["mur"])
 
-        perso.Deplacer(touches,x_fen,y_fen)
+        perso.afficher((fenetre))
+
+        perso.Deplacer(touches,x_fen,y_fen, niveau)
+        tire, images = perso.shoot(touches, tire, images)
+        
 
         creerballe(touches)
         creerEnnemies(tour,x_fen)
-        shoot(touches)
+        
         print(len(tire))
 
         #Afficher et deplacer les éléments d'un tableaux 
@@ -117,7 +121,6 @@ while not game_over:
 
         for t in tire:
             t.afficher((fenetre))
-            #t.Tire(perso.rect.x,perso.rect.y,perso.Tire())
             t.Tire(x_fen,y_fen)
             
         #Mort du perso
@@ -132,9 +135,11 @@ while not game_over:
         ennemies = supprimerElements(ennemies)
         tire = supprimerElements(tire)
 
+        pygame.display.flip()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or touches[K_ESCAPE]:
-                quit()
-        pygame.display.update()
+                continuer = False
+pygame.quit()
 
         
