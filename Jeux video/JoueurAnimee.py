@@ -20,17 +20,6 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.tire = []
 
         def Deplacer(self,touches,x,y, niveau):
-                if touches [pygame.K_UP]:
-                        self.direction = "dos"
-                        self.numimage += 1
-                        self.rect.y -= 12 * self.boost
-                        if self.rect.y <= -12 :
-
-                        #il faut modifier sa parce que c'est utilisé uniquement dans le cas
-                        #ou le perso se déplace de case en case, sauf que nous faudrait
-                        #plutôt gérer les collisions j'pense
-                                if niveau.structure[niveau.case_y-1][niveau.case_x] != "6":
-                                        self.rect.y += 12 * self.boost
                 collision = 0
                 if touches [pygame.K_UP]:
                         self.direction = "dos"

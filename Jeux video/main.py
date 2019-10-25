@@ -95,9 +95,9 @@ while continuer:
         fond.afficher((fenetre))
         #Atribution des touches
         touches = pygame.key.get_pressed()
-        niveau = Niveau("niveau/niveauTest.txt")
+        niveau = Niveau("niveau/niveauTest.txt", images["mur"])
         niveau.generer()
-        niveau.afficher(fenetre, images["mur"])
+        niveau.afficher(fenetre)
 
         perso.afficher((fenetre))
 
