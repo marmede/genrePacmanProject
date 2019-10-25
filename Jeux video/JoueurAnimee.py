@@ -20,7 +20,6 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.tire = []
 
         def Deplacer(self,touches,x,y, niveau):
-<<<<<<< Updated upstream
                 if touches [pygame.K_UP]:
                         self.direction = "dos"
                         self.numimage += 1
@@ -32,7 +31,6 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                         #plutôt gérer les collisions j'pense
                                 if niveau.structure[niveau.case_y-1][niveau.case_x] != "6":
                                         self.rect.y += 12 * self.boost
-=======
                 collision = 0
                 if touches [pygame.K_UP]:
                         self.direction = "dos"
@@ -51,7 +49,6 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 ##                        #ou le perso se déplace de case en case, sauf que nous faudrait
 ##                        #plutôt gérer les collisions j'pense
 ##                                self.rect.y += 12 * self.boost
->>>>>>> Stashed changes
                 elif touches [pygame.K_DOWN]:
                         self.direction = "face"
                         self.numimage += 1
@@ -151,15 +148,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 return self.time
 
         def shoot(self, touches, tire, images):
-<<<<<<< Updated upstream
-                if touches[pygame.K_s]:
-                        self.tps += 1
-                        if self.tps == 3:
-                                tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
-                                self.tps = 0
-=======
                 for event in pygame.event.get():
                     if event.type == pygame.KEYUP and event.key == pygame.K_s:
                         tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
->>>>>>> Stashed changes
                 return tire, images
