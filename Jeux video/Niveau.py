@@ -1,9 +1,14 @@
 import pygame
 
 class Niveau:
-    def __init__(self, fichier):
+    def __init__(self, fichier, img):
         self.fichier = fichier
         self.structure = 0
+        self.imgmur = img
+        self.tab = []
+        self.rect = self.imgmur.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
 
     def generer(self):
         #on va créer une liste pour une chaque ligne, et une liste avec toute
@@ -26,7 +31,7 @@ class Niveau:
 
             self.structure = structure_niveau
 
-    def afficher(self, fenetre, mur):
+    def afficher(self, fenetre):
         #on va parcourir la liste
         num_ligne = 0
         for ligne in self.structure:
@@ -34,11 +39,12 @@ class Niveau:
             num_case = 0
             for sprite in ligne:
                 #position en pixel (96 = taille du mur, pour le test)
-                x = num_case * 96
-                y = num_ligne * 96
+                self.rect.x = num_case * 96
+                self.rect.y = num_ligne * 96
 
                 if sprite == "6":
-                    fenetre.blit(mur, (x,y))
+                    fenetre.blit(self.imgmur, (self.rect.x,self.rect.y))
+                    self.tab.append(self.imgmur)
 
                 num_case += 1
             num_ligne += 1
