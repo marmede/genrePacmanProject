@@ -78,7 +78,7 @@ ennemies = []
 tire=[]
 
 fond = ElementGraphiqueAnimee(images["background"],0,0)
-perso = JoueurAnimee(images["luffy"],100,100)
+perso = JoueurAnimee(images["luffy"],140,100)
 
 game_over = False
 continuer = True

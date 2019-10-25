@@ -39,8 +39,8 @@ class Niveau:
             num_case = 0
             for sprite in ligne:
                 #position en pixel (96 = taille du mur, pour le test)
-                self.rect.x = num_case * 96
-                self.rect.y = num_ligne * 96
+                self.rect.x = num_case * 70
+                self.rect.y = num_ligne * 70
 
                 if sprite == "6":
                     fenetre.blit(self.imgmur, (self.rect.x,self.rect.y))

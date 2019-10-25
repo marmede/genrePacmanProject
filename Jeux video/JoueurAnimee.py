@@ -18,8 +18,9 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.numimage = 0
                 self.direction = "debout"
                 self.tire = []
+                self.vitesse = 12
 
-        def Deplacer(self,touches,x,y, niveau):
+        def Deplacer(self,touches,x,y,niveau):
                 collision = 0
                 if touches [pygame.K_UP]:
                         self.direction = "dos"
@@ -31,34 +32,34 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                                         collision = 1
 
                         if collision == 0:
-                                self.rect.y -= 12 * self.boost
-##                        if self.rect.y <= -12 :
+                                self.rect.y -= self.vitesse * self.boost
+##                        if self.rect.y <= -self.vitesse :
 ##
 ##                        #il faut modifier sa parce que c'est utilisé uniquement dans le cas
 ##                        #ou le perso se déplace de case en case, sauf que nous faudrait
 ##                        #plutôt gérer les collisions j'pense
-##                                self.rect.y += 12 * self.boost
+##                                self.rect.y += self.vitesse * self.boost
                 elif touches [pygame.K_DOWN]:
                         self.direction = "face"
                         self.numimage += 1
-                        self.rect.y += 12 * self.boost
+                        self.rect.y += self.vitesse * self.boost
                         if self.rect.y >= y - 90 : #Bas de l'écran
                                 if niveau.structure[niveau.case_y+1][niveau.case_x] != "6":
-                                        self.rect.y -= 12 * self.boost
+                                        self.rect.y -= self.vitesse * self.boost
                 elif touches [pygame.K_RIGHT]:
                         self.direction = "droite"
                         self.numimage += 1
-                        self.rect.x += 12 * self.boost
+                        self.rect.x += self.vitesse * self.boost
                         if self.rect.x >= x - 80: #Côté droit
                                 if niveau.structure[niveau.case_y][niveau.case_x+1] != "6":
-                                        self.rect.x -= 12 * self.boost
+                                        self.rect.x -= self.vitesse * self.boost
                 elif touches [pygame.K_LEFT]:
                         self.direction = "gauche"
                         self.numimage += 1
-                        self.rect.x -= 12 * self.boost
+                        self.rect.x -= self.vitesse * self.boost
                         if self.rect.x <= -20 :
                                 if niveau.structure[niveau.case_y][niveau.case_x-1] != "6":
-                                        self.rect.x += 12 * self.boost
+                                        self.rect.x += self.vitesse * self.boost
                 else:
                         self.direction = "debout"
 
