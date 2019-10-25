@@ -102,7 +102,6 @@ while continuer:
         perso.afficher((fenetre))
 
         perso.Deplacer(touches,x_fen,y_fen, niveau)
-        tire, images = perso.shoot(touches, tire, images)
         
 
         creerballe(touches)
@@ -138,8 +137,10 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
+            tire, images = perso.shoot(touches, event, tire, images)
             if event.type == pygame.QUIT or touches[K_ESCAPE]:
                 continuer = False
+
 pygame.quit()
 
         

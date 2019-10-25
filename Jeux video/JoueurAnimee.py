@@ -136,8 +136,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.trigger = num
                 return self.time
 
-        def shoot(self, touches, tire, images):
-                for event in pygame.event.get():
-                    if event.type == pygame.KEYUP and event.key == pygame.K_s:
+        def shoot(self, touches, event, tire, images):
+                if event.type == pygame.KEYUP and event.key == pygame.K_s:
                         tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
                 return tire, images
