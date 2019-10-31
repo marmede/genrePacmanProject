@@ -1,7 +1,6 @@
 import pygame
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 from BalleTiree import BalleTiree
-from Niveau import Niveau
 
 class JoueurAnimee(ElementGraphiqueAnimee):
         def __init__(self,img,x=0,y=0):
@@ -19,47 +18,75 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.direction = "debout"
                 self.tire = []
                 self.vitesse = 12
+                self.collision = [False, False, False, False]
 
-        def Deplacer(self,touches,x,y,niveau):
-                collision = 0
-                if touches [pygame.K_UP]:
-                        self.direction = "dos"
-                        self.numimage += 1
-                        for img in niveau.tab:
-                                if self.rect.colliderect(img.get_rect()) == False:
-                                        collision = 0
-                                else:
-                                        collision = 1
 
-                        if collision == 0:
-                                self.rect.y -= self.vitesse * self.boost
+        def Deplacer(self,touches,x,y,tab,haut,bas,gauche,droite):
+            
+
+                if touches [pygame.K_UP] :
+                    self.direction = "dos"
+                    self.numimage += 1
+                    self.collision[0] = bloc.collide(haut)
+                    # self.collision[0] = bloc.rect.collidepoint(self.rect.x+(self.rect.width/2),self.rect.y)
+                    if  self.collision[0] == False :
+                        self.rect.y -= self.vitesse * self.boost
+                    else:
+                        self.rect.y = self.rect.y
+                    # if self.direction != "dos" :
+                    #     self.collision[0] == False
+
+
+
+
+
+                        # if collision == 0:
+                        #         self.rect.y -= self.vitesse * self.boost
 ##                        if self.rect.y <= -self.vitesse :
 ##
 ##                        #il faut modifier sa parce que c'est utilisé uniquement dans le cas
 ##                        #ou le perso se déplace de case en case, sauf que nous faudrait
 ##                        #plutôt gérer les collisions j'pense
 ##                                self.rect.y += self.vitesse * self.boost
+
                 elif touches [pygame.K_DOWN]:
-                        self.direction = "face"
-                        self.numimage += 1
+                    self.direction = "face"
+                    self.numimage += 1
+                    self.collision[1] = bloc.collide(bas)
+                    # self.collision[1] = bloc.rect.collidepoint(self.rect.x+(self.rect.width/2),self.rect.y+(self.rect.height))
+                    if  self.collision[1] == False :
                         self.rect.y += self.vitesse * self.boost
-                        if self.rect.y >= y - 90 : #Bas de l'écran
-                                if niveau.structure[niveau.case_y+1][niveau.case_x] != "6":
-                                        self.rect.y -= self.vitesse * self.boost
+                    else:
+                        self.rect.y = self.rect.y
+                    # elif self.direction != "face" :
+                    #     self.collision[1] == False
+                        # if self.rect.y >= y - 90 : #Bas de l'écran
+                        #         if niveau.structure[niveau.case_y+1][niveau.case_x] != "6":
+                        #                 self.rect.y -= self.vitesse * self.boost
                 elif touches [pygame.K_RIGHT]:
                         self.direction = "droite"
                         self.numimage += 1
-                        self.rect.x += self.vitesse * self.boost
-                        if self.rect.x >= x - 80: #Côté droit
-                                if niveau.structure[niveau.case_y][niveau.case_x+1] != "6":
-                                        self.rect.x -= self.vitesse * self.boost
+                        #self.collision[2] = bloc.rect.collidepoint(self.rect.x+(self.rect.width),self.rect.y+(self.rect.height/2))
+                        self.collision[2] = bloc.collide(droite)
+                        if self.collision[2] == False:
+                            self.rect.x += self.vitesse * self.boost
+                        else :
+                            self.rect.x = self.rect.x
+                        # if self.rect.x >= x - 80: #Côté droit
+                        #         if niveau.structure[niveau.case_y][niveau.case_x+1] != "6":
+                        #                 self.rect.x -= self.vitesse * self.boost
                 elif touches [pygame.K_LEFT]:
                         self.direction = "gauche"
                         self.numimage += 1
-                        self.rect.x -= self.vitesse * self.boost
-                        if self.rect.x <= -20 :
-                                if niveau.structure[niveau.case_y][niveau.case_x-1] != "6":
-                                        self.rect.x += self.vitesse * self.boost
+                        #self.collision[3] = bloc.rect.collidepoint(self.rect.x,self.rect.y+(self.rect.height/2))
+                        self.collision[3] = bloc.collide(gauche)
+                        if self.collision[3] == False:
+                            self.rect.x -= self.vitesse * self.boost
+                        else:
+                            self.rect.x = self.rect.x
+                        # if self.rect.x <= -20 :
+                        #         if niveau.structure[niveau.case_y][niveau.case_x-1] != "6":
+                        #                 self.rect.x += self.vitesse * self.boost
                 else:
                         self.direction = "debout"
 
@@ -141,3 +168,10 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 if event.type == pygame.KEYUP and event.key == pygame.K_s:
                         tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
                 return tire, images
+## fonction(bloc.collide(self),self.direction)
+        def colliosion(self,rep,direction):
+            if rep == True:
+                if direction == "dos":
+                    self.collision[0] = True
+                else:
+                    self.collision[0] = False

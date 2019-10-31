@@ -12,6 +12,8 @@ from Niveau import Niveau
 def lireImages():
         
         images = {}
+        images["barre"] = [pygame.image.load("images/barre.png").convert_alpha()]
+        images["barre2"] = [pygame.image.load("images/barreCopie.png").convert_alpha()]
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
@@ -47,7 +49,7 @@ def lireImages():
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-4.png").convert_alpha())
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-5.png").convert_alpha())
 
-        images["mur"] = pygame.image.load("images/lava_ground_cracked_tileset.png").convert_alpha()
+        images["mur"] = [pygame.image.load("images/lava_ground_cracked_tileset.png").convert_alpha()]
         return images
 
 def creerballe(touches):
@@ -76,9 +78,13 @@ images = lireImages();
 balle = []
 ennemies = []
 tire=[]
+lab = []
+
 
 fond = ElementGraphiqueAnimee(images["background"],0,0)
-perso = JoueurAnimee(images["luffy"],140,100)
+perso = JoueurAnimee(images["luffy"],250,100)
+
+bloc = ElementGraphiqueAnimee(images["mur"],100,100)
 
 game_over = False
 continuer = True
@@ -96,18 +102,48 @@ while continuer:
         #Atribution des touches
         touches = pygame.key.get_pressed()
         niveau = Niveau("niveau/niveauTest.txt", images["mur"])
-        niveau.generer()
-        niveau.afficher(fenetre)
+        lab = niveau.createLab(y_fen,x_fen,bloc.rect.h,bloc.rect.w)
+        niveau.afficherLab(lab,images["mur"],fenetre)
+
+        print(lab)
 
         perso.afficher((fenetre))
 
-        perso.Deplacer(touches,x_fen,y_fen, niveau)
-        
+        if touches [pygame.K_z]:
+            perso.numimage += 1
+            perso.direction = "gauche"
 
+        a = (perso.rect.x )
+        b = (perso.rect.y)
+        haut  = ElementGraphiqueAnimee(images["barre"],a,b+2)
+        haut.afficher((fenetre))
+
+        bas = ElementGraphiqueAnimee(images["barre"],a,b+perso.rect.width)
+        bas.afficher(fenetre)
+
+        gauche = ElementGraphiqueAnimee(images["barre2"],a,b)
+        gauche.afficher(fenetre)
+
+        droite = ElementGraphiqueAnimee(images["barre2"],a+perso.rect.height-5,b)
+        droite.afficher(fenetre)
+
+        #perso.Deplacer(touches,x_fen,y_fen,bloc,haut,bas,gauche,droite)
+        
+        print(perso.rect.width)
         creerballe(touches)
         creerEnnemies(tour,x_fen)
-        
-        print(len(tire))
+        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width/2),perso.rect.y) == True:
+        #     print("haut")
+        # if bloc.rect.collidepoint(perso.rect.x,perso.rect.y+(perso.rect.height/2)) == True:
+        #     print("gauche")
+
+        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width/2),perso.rect.y+(perso.rect.height)) == True:
+        #     print("bas")
+        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width),perso.rect.y+(perso.rect.height/2)) == True:
+        #     print("droite")
+
+        if bloc.rect.colliderect(perso.rect) == True:
+            print("OUIIIIIIIII")
 
         #Afficher et deplacer les éléments d'un tableaux 
         for b in balle:
@@ -117,11 +153,17 @@ while continuer:
         for e in ennemies:
             e.afficher((fenetre))
             e.Tombe(x_fen,y_fen)
+            e.collide(perso)
 
         for t in tire:
             t.afficher((fenetre))
             t.Tire(x_fen,y_fen)
-            
+
+
+        bloc.afficher((fenetre))
+
+        print(perso.collision, perso.direction)
+
         #Mort du perso
         if perso.isAlive() == False:
             game_over = True

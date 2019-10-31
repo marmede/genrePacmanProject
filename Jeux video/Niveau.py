@@ -1,51 +1,32 @@
 import pygame
+from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 
-class Niveau:
-    def __init__(self, fichier, img):
+class Niveau(ElementGraphiqueAnimee):
+    def __init__(self,fichier,img,x=0,y=0):
+        ElementGraphiqueAnimee.__init__(self,img,x,y)
         self.fichier = fichier
-        self.structure = 0
-        self.imgmur = img
         self.tab = []
-        self.rect = self.imgmur.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
 
-    def generer(self):
-        #on va créer une liste pour une chaque ligne, et une liste avec toute
-        #les lignes
-        
-        #Python ouvre le fichier
+    def afficherLab(self,lab,imMur,fenetre):
+	    rect = imMur[0].get_rect()
+
+	    for i in range(len(lab)):
+	        for j in range(len(lab[i])):
+	            if lab[i][j]==1:
+	                fenetre.blit(imMur[0],(j*rect.w, i*rect.h))
+
+    def createLab(self,hauteur, largeur, hautCase,largCase):
+        hCase = int(hauteur/hautCase)+1
+        lCase = int(largeur/largCase)+1
+
+       	#Python ouvre le fichier
         with open(self.fichier, "r") as fichier:
-            structure_niveau = []
-
-            #On parcourt les lignes du fichier
+            tab = []
             for ligne in fichier:
-                ligne_niveau = []
-                #Pour chaque occurence dans le fichier
-                for sprite in ligne:
-                    if sprite != '\n':
-                        #on ajoute l'occurence dans la liste de la ligne
-                        ligne_niveau.append(sprite)
-                #on ajoute la ligne dans la structure
-                structure_niveau.append(ligne_niveau)
-
-            self.structure = structure_niveau
-
-    def afficher(self, fenetre):
-        #on va parcourir la liste
-        num_ligne = 0
-        for ligne in self.structure:
-            #on va parcourir les lignes
-            num_case = 0
-            for sprite in ligne:
-                #position en pixel (96 = taille du mur, pour le test)
-                self.rect.x = num_case * 70
-                self.rect.y = num_ligne * 70
-
-                if sprite == "6":
-                    fenetre.blit(self.imgmur, (self.rect.x,self.rect.y))
-                    self.tab.append(self.imgmur)
-
-                num_case += 1
-            num_ligne += 1
-                
+                l = []
+                for i in ligne:
+                    if i != '\n':
+                            l.append(int(i))
+                tab.append(l)
+        #print(tab)
+        return tab
