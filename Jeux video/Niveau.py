@@ -6,6 +6,7 @@ class Niveau(ElementGraphiqueAnimee):
         ElementGraphiqueAnimee.__init__(self,img,x,y)
         self.fichier = fichier
         self.tab = []
+        self.test = False
 
     def afficherLab(self,lab,imMur,fenetre):
 	    rect = imMur[0].get_rect()
@@ -21,12 +22,22 @@ class Niveau(ElementGraphiqueAnimee):
 
        	#Python ouvre le fichier
         with open(self.fichier, "r") as fichier:
-            tab = []
+            self.tab = []
             for ligne in fichier:
                 l = []
                 for i in ligne:
                     if i != '\n':
                             l.append(int(i))
-                tab.append(l)
+                self.tab.append(l)
         #print(tab)
-        return tab
+        return self.tab
+
+    def editLab(self,hauteur,largeur,hautCase,largCase):
+        hCase = int(hauteur/hautCase)+1
+        lCase = int(largeur/largCase)+1
+
+        with open(self.fichier,"w") as fichier:
+            for x in range(hCase):
+                    for y in range(lCase):
+                        fichier.write('0')
+                    fichier.write('\n')

@@ -2,6 +2,14 @@ import pygame
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 from BalleTiree import BalleTiree
 
+class Point():
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+
+    def pos(self):
+        return (self.x,self.y)
+
 class JoueurAnimee(ElementGraphiqueAnimee):
         def __init__(self,img,x=0,y=0):
                 ElementGraphiqueAnimee.__init__(self,img["debout"],x,y)
@@ -16,92 +24,77 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.image = img
                 self.numimage = 0
                 self.direction = "debout"
+                self.last_direction = "debout"
                 self.tire = []
                 self.vitesse = 12
-                self.collision = [False, False, False, False]
+                self.collision = [False, False, False, False] #[haut_droite|haut_gauche|bas_gauche|bas_droite]
 
 
-        def Deplacer(self,touches,x,y,tab,haut,bas,gauche,droite):
-            
+        def Deplacer(self,touches,x,y,bloc):
+                haut_g = Point((self.rect.x),(self.rect.y))
+                haut_d = Point((self.rect.w + self.rect.x),(self.rect.y))
+                bas_g = Point((self.rect.x),(self.rect.y + self.rect.h))
+                bas_d = Point((self.rect.x + self.rect.w), (self.rect.y + self.rect.h))
+
 
                 if touches [pygame.K_UP] :
                     self.direction = "dos"
+                    self.last_direction = "dos_s"
                     self.numimage += 1
-                    self.collision[0] = bloc.collide(haut)
-                    # self.collision[0] = bloc.rect.collidepoint(self.rect.x+(self.rect.width/2),self.rect.y)
-                    if  self.collision[0] == False :
+                    self.collision[0] = bloc.rect.collidepoint(haut_d.pos())
+                    self.collision[1] = bloc.rect.collidepoint(haut_g.pos())
+                    if  self.collision[0] == False and self.collision[1] == False:
                         self.rect.y -= self.vitesse * self.boost
                     else:
                         self.rect.y = self.rect.y
-                    # if self.direction != "dos" :
-                    #     self.collision[0] == False
-
-
-
-
-
-                        # if collision == 0:
-                        #         self.rect.y -= self.vitesse * self.boost
-##                        if self.rect.y <= -self.vitesse :
-##
-##                        #il faut modifier sa parce que c'est utilisé uniquement dans le cas
-##                        #ou le perso se déplace de case en case, sauf que nous faudrait
-##                        #plutôt gérer les collisions j'pense
-##                                self.rect.y += self.vitesse * self.boost
 
                 elif touches [pygame.K_DOWN]:
                     self.direction = "face"
+                    self.last_direction = "debout"
                     self.numimage += 1
-                    self.collision[1] = bloc.collide(bas)
-                    # self.collision[1] = bloc.rect.collidepoint(self.rect.x+(self.rect.width/2),self.rect.y+(self.rect.height))
-                    if  self.collision[1] == False :
+                    self.collision[3] = bloc.rect.collidepoint(bas_d.pos())
+                    self.collision[2] = bloc.rect.collidepoint(bas_g.pos())
+                    if  self.collision[2] == False and self.collision[3] == False:
                         self.rect.y += self.vitesse * self.boost
                     else:
                         self.rect.y = self.rect.y
-                    # elif self.direction != "face" :
-                    #     self.collision[1] == False
-                        # if self.rect.y >= y - 90 : #Bas de l'écran
-                        #         if niveau.structure[niveau.case_y+1][niveau.case_x] != "6":
-                        #                 self.rect.y -= self.vitesse * self.boost
+
                 elif touches [pygame.K_RIGHT]:
                         self.direction = "droite"
+                        self.last_direction = "droite_s"
                         self.numimage += 1
-                        #self.collision[2] = bloc.rect.collidepoint(self.rect.x+(self.rect.width),self.rect.y+(self.rect.height/2))
-                        self.collision[2] = bloc.collide(droite)
-                        if self.collision[2] == False:
+                        self.collision[0] = bloc.rect.collidepoint(haut_d.pos())
+                        self.collision[3] = bloc.rect.collidepoint(bas_d.pos())
+                        if self.collision[0] == False and self.collision[3] == False:
                             self.rect.x += self.vitesse * self.boost
                         else :
                             self.rect.x = self.rect.x
-                        # if self.rect.x >= x - 80: #Côté droit
-                        #         if niveau.structure[niveau.case_y][niveau.case_x+1] != "6":
-                        #                 self.rect.x -= self.vitesse * self.boost
+
                 elif touches [pygame.K_LEFT]:
                         self.direction = "gauche"
+                        self.last_direction = "gauche_s"
                         self.numimage += 1
-                        #self.collision[3] = bloc.rect.collidepoint(self.rect.x,self.rect.y+(self.rect.height/2))
-                        self.collision[3] = bloc.collide(gauche)
-                        if self.collision[3] == False:
+                        self.collision[1] = bloc.rect.collidepoint(haut_g.pos())
+                        self.collision[2] = bloc.rect.collidepoint(bas_g.pos())
+                        if self.collision[1] == False and self.collision[2] == False :
                             self.rect.x -= self.vitesse * self.boost
                         else:
                             self.rect.x = self.rect.x
-                        # if self.rect.x <= -20 :
-                        #         if niveau.structure[niveau.case_y][niveau.case_x-1] != "6":
-                        #                 self.rect.x += self.vitesse * self.boost
                 else:
-                        self.direction = "debout"
+                        self.direction = self.last_direction
 
         def Tire(self):
 
-            if(self.direction == "dos"):
+            if(self.last_direction == "dos"):
                 return 0,-10
 
-            elif(self.direction == "face" or self.direction == "debout"):
+            elif(self.last_direction == "face" or self.last_direction == "debout"):
                 return 0,10
 
-            elif(self.direction == "droite"):
+            elif(self.last_direction == "droite"):
                 return 10,0
 
-            elif(self.direction == "gauche"):
+            elif(self.last_direction == "gauche"):
                 return -10,0
 
         def setTire(self,delta=[]):
