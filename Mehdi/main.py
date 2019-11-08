@@ -120,7 +120,7 @@ perso = JoueurAnimee(images["luffy"],250,100)
 
 fantome = Fantome(images["blinky"], 0, 0)
 
-bloc = ElementGraphique(images["mur"],100,100)
+bloc = ElementGraphiqueAnimee(images["mur"],100,100)
 
 game_over = False
 continuer = True

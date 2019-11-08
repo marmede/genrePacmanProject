@@ -1,20 +1,20 @@
 import pygame
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 
-class Niveau(ElementGraphique):
+class Niveau(ElementGraphiqueAnimee):
     def __init__(self,fichier,img,x=0,y=0):
-        ElementGraphique.__init__(self,img,x,y)
+        ElementGraphiqueAnimee.__init__(self,img,x,y)
         self.fichier = fichier
         self.tab = []
         self.test = False
 
     def afficherLab(self,lab,imMur,fenetre):
-	    rect = imMur.get_rect()
+	    rect = imMur[0].get_rect()
 
 	    for i in range(len(lab)):
 	        for j in range(len(lab[i])):
 	            if lab[i][j]==1:
-	                fenetre.blit(imMur,(j*rect.w, i*rect.h))
+	                fenetre.blit(imMur[0],(j*rect.w, i*rect.h))
 
     def createLab(self,hauteur, largeur, hautCase,largCase):
         hCase = int(hauteur/hautCase)+1
