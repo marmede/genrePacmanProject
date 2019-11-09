@@ -2,6 +2,7 @@ import pygame
 import random
 from pygame.locals import *
 from random import randint
+from ElementGraphique import ElementGraphique
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 from JoueurAnimee import JoueurAnimee
 from BalleAnimee import BalleAnimee
@@ -10,62 +11,65 @@ from BalleTiree import BalleTiree
 from Niveau import *
 
 def lireImages():
-        
-        images = {}
-        images["barre"] = [pygame.image.load("images/barre.png").convert_alpha()]
-        images["barre2"] = [pygame.image.load("images/barreCopie.png").convert_alpha()]
-        images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
-        images["background"] = [pygame.image.load("images/background2.jpg").convert()]
-        images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
-        images["luffy"] = {}
-        images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
-        images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
+	images = {}
+	images["blur"] = [pygame.image.load("images/blur.png").convert_alpha()]
+	images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
+	images["background"] = [pygame.image.load("images/background2.jpg").convert()]
+	images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
+	images["luffy"] = {}
+	images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
+	images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
 
-        images["luffy"]["face"] = []
-        images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha())
-        images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-2.png").convert_alpha())
-        images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-3.png").convert_alpha())
-        images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-4.png").convert_alpha())
-        images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-5.png").convert_alpha())
+	images["luffy"]["face"] = []
+	images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha())
+	images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-2.png").convert_alpha())
+	images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-3.png").convert_alpha())
+	images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-4.png").convert_alpha())
+	images["luffy"]["face"].append(pygame.image.load("images/Luffy/row-1-col-5.png").convert_alpha())
 
-        images["luffy"]["gauche"] = []
-        images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-1.png").convert_alpha())
-        images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-2.png").convert_alpha())
-        images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-3.png").convert_alpha())
-        images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-4.png").convert_alpha())
-        images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-5.png").convert_alpha())
+	images["luffy"]["gauche"] = []
+	images["luffy"]["gauche_s"] = []
+	images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-1.png").convert_alpha())
+	images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-2.png").convert_alpha())
+	images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-3.png").convert_alpha())
+	images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-4.png").convert_alpha())
+	images["luffy"]["gauche"].append(pygame.image.load("images/Luffy/row-2-col-5.png").convert_alpha())
+	images["luffy"]["gauche_s"].append(pygame.image.load("images/Luffy/row-2-col-1.png").convert_alpha())
 
-        images["luffy"]["droite"] = []
-        images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-1.png").convert_alpha())
-        images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-2.png").convert_alpha())
-        images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-3.png").convert_alpha())
-        images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-4.png").convert_alpha())
-        images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-5.png").convert_alpha())
+	images["luffy"]["droite"] = []
+	images["luffy"]["droite_s"] = []
+	images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-1.png").convert_alpha())
+	images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-2.png").convert_alpha())
+	images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-3.png").convert_alpha())
+	images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-4.png").convert_alpha())
+	images["luffy"]["droite"].append(pygame.image.load("images/Luffy/row-3-col-5.png").convert_alpha())
+	images["luffy"]["droite_s"].append(pygame.image.load("images/Luffy/row-3-col-1.png").convert_alpha())
 
-        images["luffy"]["dos"] = []
-        images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-1.png").convert_alpha())
-        images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-2.png").convert_alpha())
-        images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-3.png").convert_alpha())
-        images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-4.png").convert_alpha())
-        images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-5.png").convert_alpha())
+	images["luffy"]["dos"] = []
+	images["luffy"]["dos_s"] = []
+	images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-1.png").convert_alpha())
+	images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-2.png").convert_alpha())
+	images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-3.png").convert_alpha())
+	images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-4.png").convert_alpha())
+	images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-5.png").convert_alpha())
+	images["luffy"]["dos_s"].append(pygame.image.load("images/Luffy/row-4-col-1.png").convert_alpha())
 
-        images["mur"] = [pygame.image.load("images/lava_ground_cracked_tileset.png").convert_alpha()]
-        return images
+	return images
 
 def creerballe(touches):
-    if touches[K_SPACE]:
-        balle.append(BalleAnimee(images["luffy"]["debout"]))
+	if touches[K_SPACE]:
+		balle.append(BalleAnimee(images["luffy"]["debout"]))
 
 def creerEnnemies(tour,x):
-    if (tour%20) == 0:
-        ennemies.append(BalleAnimee(images["balle"],0,-50))
+	if (tour%20) == 0:
+		ennemies.append(BalleAnimee(images["balle"],0,-50))
 
 def supprimerElements(tab):
-    newTab = []
-    for e in tab:
-        if e.isAlive():
-            newTab.append(e)
-    return newTab
+	newTab = []
+	for e in tab:
+		if e.isAlive():
+			newTab.append(e)
+	return newTab
 
 
 pygame.init()
@@ -83,120 +87,105 @@ matH = int(y_fen/taille_tuile) + 1
 matrice = chargerMatrice(matW, matH, cheminNiveau)
 print(matrice)
 
+yellow = (255, 255, 0)
+font = pygame.font.Font(None, 34)
+score = 0
+
 images = lireImages();
 #Les tableaux des éléments
 balle = []
 ennemies = []
 tire=[]
-lab = []
 
-
+blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
+blur.image[0] = pygame.transform.scale(blur.image[0], (x_fen, y_fen))
 fond = ElementGraphiqueAnimee(images["background"],0,0)
-perso = JoueurAnimee(images["luffy"],250,100, matrice, taille_tuile)
-
-bloc = ElementGraphiqueAnimee(images["mur"],100,100)
+perso = JoueurAnimee(images["luffy"], 250, 100, matrice, taille_tuile)
 
 game_over = False
-continuer = True
+key_up = True
+touch_wait = pygame.time.get_ticks()
+continuer = 1
 
 #Tour == variable de temps
 tour = 0
 
 while continuer:
-        tour += 1
-        framerate = pygame.time.Clock()
-        Fps = framerate.tick(30)
-        #Affichage images
-        fond.afficher((fenetre))
-        #Atribution des touches
-        touches = pygame.key.get_pressed()
-#        niveau = Niveau("niveau/niveauTest.txt", images["mur"])
-#        lab = niveau.createLab(y_fen,x_fen,bloc.rect.h,bloc.rect.w)
-#        niveau.afficherLab(lab,images["mur"],fenetre)
+	tour += 1
+	framerate = pygame.time.Clock()
+	Fps = framerate.tick(35)
+	#Affichage images
+	fond.afficher(fenetre)
+	#Atribution des touches
+	touches = pygame.key.get_pressed()
 
-        print(lab)
+	if not touches[pygame.K_ESCAPE]:
+		key_up = True
+	if touches[pygame.K_ESCAPE] and pygame.time.get_ticks() - touch_wait > 300 and key_up:
+		key_up = False
+		continuer = 2 if continuer == 1 else 1
+		touch_wait = pygame.time.get_ticks()
 
-        perso.afficher((fenetre))
+	for i in range(matW):
+		for j in range(matH):
+			if matrice[i][j] != '0':
+				Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1).afficher(fenetre)
 
-        for i in range(matW):
-            for j in range(matH):
-                if matrice[i][j] != '0':
-                    Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1).afficher(fenetre)
+	if continuer == 1:
+		perso.deplacer(touches, fenetre)
 
-        if touches [pygame.K_z]:
-            perso.numimage += 1
-            perso.direction = "gauche"
+		creerballe(touches)
+		creerEnnemies(tour, x_fen)
 
-        a = (perso.rect.x )
-        b = (perso.rect.y)
-        haut  = ElementGraphiqueAnimee(images["barre"],a,b+2)
-        haut.afficher((fenetre))
+		txt = "Score: {}".format(score)
+		ElementGraphique(font.render(txt, True, yellow), (x_fen-(font.size(txt))[0]) / 2, 20).afficher(fenetre)
+		perso.afficher(fenetre)
 
-        bas = ElementGraphiqueAnimee(images["barre"],a,b+perso.rect.width)
-        bas.afficher(fenetre)
+		#Afficher et deplacer les éléments d'un tableaux 
+		for b in balle:
+			b.afficher(fenetre)
+			b.Deplacer(x_fen, y_fen)
 
-        gauche = ElementGraphiqueAnimee(images["barre2"],a,b)
-        gauche.afficher(fenetre)
+		for e in ennemies:
+			e.afficher(fenetre)
+			e.Tombe(x_fen, y_fen)
+			if e.collide(perso):
+				score += 1
 
-        droite = ElementGraphiqueAnimee(images["barre2"],a+perso.rect.height-5,b)
-        droite.afficher(fenetre)
+		for t in tire:
+			t.afficher(fenetre)
+			t.Tire(x_fen, y_fen)
 
-        perso.deplacer(touches, fenetre)
-        
-        print(perso.rect.width)
-        creerballe(touches)
-        creerEnnemies(tour,x_fen)
-        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width/2),perso.rect.y) == True:
-        #     print("haut")
-        # if bloc.rect.collidepoint(perso.rect.x,perso.rect.y+(perso.rect.height/2)) == True:
-        #     print("gauche")
+		#Mort du perso
+		if perso.isAlive() == False:
+			game_over = True
 
-        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width/2),perso.rect.y+(perso.rect.height)) == True:
-        #     print("bas")
-        # if bloc.rect.collidepoint(perso.rect.x+(perso.rect.width),perso.rect.y+(perso.rect.height/2)) == True:
-        #     print("droite")
+	elif continuer == 2:
+		ElementGraphique(font.render(txt, True, yellow), (x_fen-(font.size(txt))[0]) / 2, 20).afficher(fenetre)
+		perso.afficher(fenetre)
+		for b in balle:
+			b.afficher(fenetre)
 
-        if bloc.rect.colliderect(perso.rect) == True:
-            print("OUIIIIIIIII")
+		for e in ennemies:
+			e.afficher(fenetre)
 
-        #Afficher et deplacer les éléments d'un tableaux 
-        for b in balle:
-            b.afficher((fenetre))
-            b.Deplacer(x_fen,y_fen)
+		for t in tire:
+			t.afficher(fenetre)
+		blur.afficher(fenetre)
+	######################################
 
-        for e in ennemies:
-            e.afficher((fenetre))
-            e.Tombe(x_fen,y_fen)
-            e.collide(perso)
+	######################################
 
-        for t in tire:
-            t.afficher((fenetre))
-            t.Tire(x_fen,y_fen)
+	#Suppressions des éléments inutiles (mort ou hors écran)
+	balle = supprimerElements(balle) #on gagne
+	ennemies = supprimerElements(ennemies) #on perd point
+	tire = supprimerElements(tire)
 
+	pygame.display.flip()
 
-        bloc.afficher((fenetre))
-
-        print(perso.collision, perso.direction)
-
-        #Mort du perso
-        if perso.isAlive() == False:
-            game_over = True
-        ######################################
-
-        ######################################
-
-        #Suppressions des éléments inutiles (mort ou hors écran)
-        balle = supprimerElements(balle)
-        ennemies = supprimerElements(ennemies)
-        tire = supprimerElements(tire)
-
-        pygame.display.flip()
-
-        for event in pygame.event.get():
-            tire, images = perso.shoot(touches, event, tire, images)
-            if event.type == pygame.QUIT or touches[K_ESCAPE]:
-                continuer = False
+	for event in pygame.event.get():
+		tire, images = perso.shoot(touches, event, tire, images)
+		if event.type == pygame.QUIT:
+			continuer = 0
 
 pygame.quit()
-
-        

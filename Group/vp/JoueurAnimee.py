@@ -16,6 +16,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		self.image = img
 		self.numimage = 0
 		self.direction = "debout"
+		self.last_direction = "debout"
 		self.tire = []
 		self.vitesse = 12
 		self.collision = [False, False, False, False] #UP, DOWN, LEFT, RIGTH
@@ -33,7 +34,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":
 			self.collision[2] = True
 
-		if self.matrice[int((self.rect.x-self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":
 			self.collision[3] = True
 
 	def deplacer(self, touches, window):
@@ -49,38 +50,42 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 
 		if touches[pygame.K_UP]:
 			self.direction = "dos"
+			self.last_direction = "dos_s"
 			self.numimage += 1
 			sens = 1
-			if self.collision[0]:
+			if self.collision[0] or self.collision[2]:
 				self.rect.y = self.rect.y
 			else:
 				self.rect.y -= self.vitesse * self.boost
 
 		elif touches[pygame.K_DOWN]:
 			self.direction = "face"
+			self.last_direction = "debout"
 			self.numimage += 1
-			if  self.collision[1]:
+			if  self.collision[1] or self.collision[3]:
 				self.rect.y = self.rect.y
 			else:
 				self.rect.y += self.vitesse * self.boost
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
+			self.last_direction = "droite_s"
 			self.numimage += 1
-			if self.collision[2]:
+			if self.collision[2] or self.collision[3]:
 				self.rect.x = self.rect.x
 			else:
 				self.rect.x += self.vitesse * self.boost
 
-		elif touches [pygame.K_LEFT]:
+		elif touches[pygame.K_LEFT]:
 			self.direction = "gauche"
+			self.last_direction = "gauche_s"
 			self.numimage += 1
-			if self.collision[3]:
+			if self.collision[0] or self.collision[1]:
 				self.rect.x = self.rect.x
 			else:
 				self.rect.x -= self.vitesse * self.boost
 		else:
-			self.direction = "debout"
+			self.direction = self.last_direction
 
 	def Tire(self):
 		if(self.direction == "dos"):

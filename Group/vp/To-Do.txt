@@ -1,1 +1,2 @@
-Revoir collisions gauche et haut
+Finir affichage score
+Finir menu
