@@ -87,9 +87,17 @@ matH = int(y_fen/taille_tuile) + 1
 matrice = chargerMatrice(matW, matH, cheminNiveau)
 print(matrice)
 
-yellow = (255, 255, 0)
-font = pygame.font.Font(None, 34)
 score = 0
+red = (255, 0, 0)
+blue = (0, 0, 255)
+offsetColor = blue
+yellow = (255, 255, 0)
+white = (255, 255, 255)
+font = pygame.font.Font(None, 34)
+sText = 72
+offset = 2 #plus petit que possible pour de meilleur résultat
+menuFont = pygame.font.Font(None, sText)
+menuTxt = ["JOUER", "CLASSEMENT", "EDITEUR NIVEAU", "OPTIONS", "QUITTER"]
 
 images = lireImages();
 #Les tableaux des éléments
@@ -137,8 +145,8 @@ while continuer:
 		creerballe(touches)
 		creerEnnemies(tour, x_fen)
 
-		txt = "Score: {}".format(score)
-		ElementGraphique(font.render(txt, True, yellow), (x_fen-(font.size(txt))[0]) / 2, 20).afficher(fenetre)
+		scoreTxt = "Score: {}".format(score)
+		ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
 		perso.afficher(fenetre)
 
 		#Afficher et deplacer les éléments d'un tableaux 
@@ -161,7 +169,7 @@ while continuer:
 			game_over = True
 
 	elif continuer == 2:
-		ElementGraphique(font.render(txt, True, yellow), (x_fen-(font.size(txt))[0]) / 2, 20).afficher(fenetre)
+		ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
 		perso.afficher(fenetre)
 		for b in balle:
 			b.afficher(fenetre)
@@ -172,6 +180,15 @@ while continuer:
 		for t in tire:
 			t.afficher(fenetre)
 		blur.afficher(fenetre)
+
+		s = len(menuTxt)
+		for i in range(s):
+			wTxt, hTxt = menuFont.size(menuTxt[i])
+			xTxt = (x_fen - wTxt) / 2
+			yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
+			ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset).afficher(fenetre)
+			ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+
 	######################################
 
 	######################################
