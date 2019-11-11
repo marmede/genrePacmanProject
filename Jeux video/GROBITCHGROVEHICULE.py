@@ -1,4 +1,4 @@
 import pygame
 
-print("Je t'emmerde")
+print("Je t'encule")
 print("nou dako")
