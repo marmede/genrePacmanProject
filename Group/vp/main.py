@@ -85,7 +85,7 @@ matW = int(x_fen/taille_tuile) + 1
 matH = int(y_fen/taille_tuile) + 1
 
 matrice = chargerMatrice(matW, matH, cheminNiveau)
-print(matrice)
+#print(matrice)
 
 score = 0
 red = (255, 0, 0)
@@ -126,6 +126,11 @@ while continuer:
 	fond.afficher(fenetre)
 	#Atribution des touches
 	touches = pygame.key.get_pressed()
+	print(perso.limite)
+	print("POSITION ACTUEL : "+str(perso.rect.y))
+	print("A ne pas depasser : "+str(perso.limite[3]))
+	print(perso.collision)
+
 
 	if not touches[pygame.K_ESCAPE]:
 		key_up = True
