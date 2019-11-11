@@ -73,11 +73,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "dos"
 			self.last_direction = "dos_s"
 			self.numimage += 1
-<<<<<<< HEAD
 			if self.rect.y > self.limite[2]:
-=======
-			if not boolHaut:
->>>>>>> master
 				self.rect.y -= self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
@@ -86,11 +82,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "face"
 			self.last_direction = "face"
 			self.numimage += 1
-<<<<<<< HEAD
 			if  self.rect.y >= self.limite[3] :
-=======
-			if not boolBas:
->>>>>>> master
 				self.rect.y += self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
@@ -106,16 +98,11 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "gauche"
 			self.last_direction = "gauche_s"
 			self.numimage += 1
-<<<<<<< HEAD
 			if self.rect.x >= self.limite[0] and self.rect.x >= self.limite[1]:
 				self.rect.x -= self.vitesse * self.boost
 			else:
 				self.rect.x = self.rect.x
-=======
-			if not boolGauche:
-				self.rect.x -= self.vitesse * self.boost
 				
->>>>>>> master
 		else:
 			self.direction = self.last_direction
 
