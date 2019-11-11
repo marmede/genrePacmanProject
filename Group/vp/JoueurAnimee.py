@@ -57,28 +57,28 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "dos"
 			self.last_direction = "dos_s"
 			self.numimage += 1
-			if not boolHaut or (not self.collision[2] and boolGauche) or (not self.collision[0] and boolDroit):
+			if not boolHaut:
 				self.rect.y -= self.vitesse * self.boost
 
 		elif touches[pygame.K_DOWN]:
 			self.direction = "face"
 			self.last_direction = "face"
 			self.numimage += 1
-			if not boolBas or (not self.collision[3] and boolGauche) or (not self.collision[1] and boolDroit):
+			if not boolBas:
 				self.rect.y += self.vitesse * self.boost
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
 			self.last_direction = "droite_s"
 			self.numimage += 1
-			if not boolDroit or (not self.collision[2] and boolBas) or (not self.collision[3] and boolHaut):
+			if not boolDroit:
 				self.rect.x += self.vitesse * self.boost
 
 		elif touches[pygame.K_LEFT]:
 			self.direction = "gauche"
 			self.last_direction = "gauche_s"
 			self.numimage += 1
-			if not boolGauche or (not self.collision[0] and boolBas) or (not self.collision[1] and boolHaut):
+			if not boolGauche:
 				self.rect.x -= self.vitesse * self.boost
 				
 		else:
