@@ -168,7 +168,7 @@ while continuer:
 		if perso.isAlive() == False:
 			game_over = True
 
-	elif continuer == 2:
+	elif continuer > 1:
 		ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
 		perso.afficher(fenetre)
 		for b in balle:
@@ -181,13 +181,16 @@ while continuer:
 			t.afficher(fenetre)
 		blur.afficher(fenetre)
 
-		s = len(menuTxt)
-		for i in range(s):
-			wTxt, hTxt = menuFont.size(menuTxt[i])
-			xTxt = (x_fen - wTxt) / 2
-			yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
-			ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset).afficher(fenetre)
-			ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+		if continuer == 2:
+			s = len(menuTxt)
+			for i in range(s):
+				wTxt, hTxt = menuFont.size(menuTxt[i])
+				xTxt = (x_fen - wTxt) / 2
+				yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
+				ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset).afficher(fenetre)
+				ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+		elif continuer == 3:
+			ben_reste_code = True
 
 	######################################
 
