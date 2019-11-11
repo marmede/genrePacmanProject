@@ -11,7 +11,7 @@ class BalleAnimee(ElementGraphiqueAnimee):
 		self.rect.x = randint(0,650)
 		self.rect.y = y
 
-	def Deplacer(self, x, y, state):
+	def Deplacer(self, x, y):
 		self.rect.x += self.deltaX
 		self.rect.x += self.deltaX
 		if self.rect.x <= -10 or self.rect.x >= 650 :

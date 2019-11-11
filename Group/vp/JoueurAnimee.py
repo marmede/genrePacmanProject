@@ -22,6 +22,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		self.collision = [False, False, False, False] #UP, DOWN, LEFT, RIGTH
 		self.taille_tuile = size
 		self.matrice = mat
+		self.count = 0
 
 	def verifCollision(self):
 		self.collision = [False, False, False, False]
@@ -40,7 +41,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 	def deplacer(self, touches, window):
 		self.verifCollision()
 		largeur, hauteur = window.get_size()
-		if self.rect.x <= -10 or self.rect.x >= largeur-self.rect.w :
+		if self.rect.x <= 0 or self.rect.x >= largeur-self.rect.w :
 			self.deltaX = - self.deltaX
 			self.rect.x = self.rect.x
 
@@ -48,42 +49,38 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.deltaY = - self.deltaY
 			self.rect.y = self.rect.y
 
+		boolHaut = self.collision[0] and self.collision[2]
+		boolBas = self.collision[1] and self.collision[3]
+		boolDroit = self.collision[2] and self.collision[3]
+		boolGauche = self.collision[0] and self.collision[1]
 		if touches[pygame.K_UP]:
 			self.direction = "dos"
 			self.last_direction = "dos_s"
 			self.numimage += 1
-			sens = 1
-			if self.collision[0] or self.collision[2]:
-				self.rect.y = self.rect.y
-			else:
+			if not boolHaut or (not self.collision[2] and boolGauche) or (not self.collision[0] and boolDroit):
 				self.rect.y -= self.vitesse * self.boost
 
 		elif touches[pygame.K_DOWN]:
 			self.direction = "face"
-			self.last_direction = "debout"
+			self.last_direction = "face"
 			self.numimage += 1
-			if  self.collision[1] or self.collision[3]:
-				self.rect.y = self.rect.y
-			else:
+			if not boolBas or (not self.collision[3] and boolGauche) or (not self.collision[1] and boolDroit):
 				self.rect.y += self.vitesse * self.boost
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
 			self.last_direction = "droite_s"
 			self.numimage += 1
-			if self.collision[2] or self.collision[3]:
-				self.rect.x = self.rect.x
-			else:
+			if not boolDroit or (not self.collision[2] and boolBas) or (not self.collision[3] and boolHaut):
 				self.rect.x += self.vitesse * self.boost
 
 		elif touches[pygame.K_LEFT]:
 			self.direction = "gauche"
 			self.last_direction = "gauche_s"
 			self.numimage += 1
-			if self.collision[0] or self.collision[1]:
-				self.rect.x = self.rect.x
-			else:
+			if not boolGauche or (not self.collision[0] and boolBas) or (not self.collision[1] and boolHaut):
 				self.rect.x -= self.vitesse * self.boost
+				
 		else:
 			self.direction = self.last_direction
 
