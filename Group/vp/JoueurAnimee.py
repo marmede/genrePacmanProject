@@ -53,12 +53,12 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.limite[3] = 0
 
 
-		if self.matrice[int((self.rect.x - 1 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER
+		if self.matrice[int((self.rect.x - 1 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER BAS
 			self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
 		else:
 			self.limite[1] = 0
 
-		if self.matrice[int((self.rect.x - 33 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER
+		if self.matrice[int((self.rect.x - 26 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER HAUT
 			self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
 		else:
 			self.limite[1] = 0
