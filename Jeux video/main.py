@@ -161,6 +161,9 @@ while continuer:
         fond.afficher(fenetre)
         #Atribution des touches
         touches = pygame.key.get_pressed()
+        #Attribution de la souris et de son click
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
         # print(perso.collision)
         #print("POSITION ACTUEL EN X: "+str(perso.rect.x))
         #print("POSITION ACTUEL EN Y: "+str(perso.rect.y))
@@ -229,8 +232,16 @@ while continuer:
                                 wTxt, hTxt = menuFont.size(menuTxt[i])
                                 xTxt = (x_fen - wTxt) / 2
                                 yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
-                                ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset).afficher(fenetre)
-                                ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+                                menutest = ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset)
+                                menutest.afficher(fenetre)
+                                menutestombre = ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+                                #si le text est en collision avec la position de la souris
+                                if menutest.rect.collidepoint(mouse):
+                                        offsetColor = red
+                                        menutest.afficher(fenetre)
+                                #sinon on remet la couleur d'avant
+                                else:
+                                        offsetColor = blue
                 elif continuer == 3:
                         ben_reste_code = True
 
