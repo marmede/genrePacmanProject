@@ -29,51 +29,83 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		if(self.limite[num] == 0):
 			self.limite[num] =  limite
 
+	def debug(self):
+		for i in range(len(self.limite)):
+			if self.rect.y == self.limite[i]:
+				# if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0":
+				# 	self.limite[5] = 0
+				# 	self.limite[2] = 0
+
+				if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0":
+					self.limite[4] = 0
+					self.limite[3] = 0
+
 	def verifCollision(self):
 		self.collision = [False, False, False, False]
-		if self.matrice[int((self.rect.x )/self.taille_tuile)-1][int(self.rect.y/self.taille_tuile)] != "0":#haut_gauche
-			self.setLimite((int((self.rect.x )/self.taille_tuile) * 72)+1,0)
-		else:
-			self.limite[0] = 0
+		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#haut_gauche
+			self.collision[0] = True
+			
+		if self.matrice[int((self.rect.x)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":#bas_gauche
+			self.collision[0] = True
 
-		if self.matrice[int((self.rect.x)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":#bas_gauche
-			print("ok")
-			self.setLimite((int((self.rect.x )/self.taille_tuile) * 72)+1,1)
-		else:
-			self.limite[1] = 0
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#haut_droit
+			self.collision[1] = True
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#haut_droit
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":#bas_droit
+			self.collision[1] = True
+
+
+		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#haut_gauche
 			self.setLimite((int(self.rect.y/self.taille_tuile) * 72)+4,2)
-
+			if self.rect.y < self.limite[2]:
+				self.limite[2] = 0
 		else:
 			self.limite[2] = 0
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] != "0":#bas_droit
-			print(True)
-			self.setLimite((int((self.rect.y+self.rect.h)/self.taille_tuile) * 72)+4,3)
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#haut_droit
+			self.setLimite((int(self.rect.y/self.taille_tuile) * 72)+4,2)
+			if self.rect.y < self.limite[2]:
+				self.limite[2] = 0
 		else:
-			self.limite[3] = self.rect.y
+			self.limite[2] = 0
+
+		if self.matrice[int((self.rect.x)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] != "0":#bas_gauche
+			self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+int(72/4.5),3)
+			if self.rect.y > self.limite[3]:
+				self.limite[3] = 0
+		else:
+			self.limite[3] = 0
+
+
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] != "0":#bas_droit
+			if self.limite[3] == 0:
+				self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+16,4)
+		else:
+			self.limite[4] = 0
+
+
+
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#bas_droit
+			if self.limite[2] == 0:
+				self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+4,5)
+		else:
+			self.limite[5] = 0
+			
 
 	def deplacer(self, touches, window):
 		self.verifCollision()
 		largeur, hauteur = window.get_size()
 		if self.rect.x <= 0 or self.rect.x >= largeur-self.rect.w :
 			self.deltaX = - self.deltaX
-			# self.rect.x = self.rect.x
 
 		if self.rect.y <= 0 or self.rect.y >= hauteur-self.rect.h :
 			self.deltaY = - self.deltaY
-			# self.rect.y = self.rect.y
 
-		boolHaut = self.collision[0] and self.collision[2]
-		boolBas = self.collision[1] and self.collision[3]
-		boolDroit = self.collision[2] and self.collision[3]
-		boolGauche = self.collision[0] and self.collision[1]
 		if touches[pygame.K_UP]:
 			self.direction = "dos"
 			self.last_direction = "dos_s"
 			self.numimage += 1
-			if self.rect.y > self.limite[2]:
+			if self.rect.y > self.limite[2] and self.rect.y > self.limite[5]:
 				self.rect.y -= self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
@@ -82,23 +114,26 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "face"
 			self.last_direction = "face"
 			self.numimage += 1
-			if  self.rect.y >= self.limite[3] :
+			if  self.rect.y != self.limite[3] and self.rect.y != self.limite[4]:
 				self.rect.y += self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
+				self.debug()
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
 			self.last_direction = "droite_s"
 			self.numimage += 1
-			if not boolDroit:
+			if not self.collision[1] :
 				self.rect.x += self.vitesse * self.boost
+			else:
+				self.rect.x = self.rect.x
 
 		elif touches[pygame.K_LEFT]:
 			self.direction = "gauche"
 			self.last_direction = "gauche_s"
 			self.numimage += 1
-			if self.rect.x >= self.limite[0] and self.rect.x >= self.limite[1]:
+			if not self.collision[0]:
 				self.rect.x -= self.vitesse * self.boost
 			else:
 				self.rect.x = self.rect.x

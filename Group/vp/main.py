@@ -126,12 +126,12 @@ while continuer:
 	fond.afficher(fenetre)
 	#Atribution des touches
 	touches = pygame.key.get_pressed()
-	print(perso.limite)
-	print("POSITION ACTUEL : "+str(perso.rect.y))
-	print("A ne pas depasser : "+str(perso.limite[3]))
 	print(perso.collision)
+	print("POSITION ACTUEL : "+str(perso.rect.y))
+	# print("A ne pas depasser : "+str(perso.limite[3]))
+	print(perso.limite)
 
-
+	#304 376
 	if not touches[pygame.K_ESCAPE]:
 		key_up = True
 	if touches[pygame.K_ESCAPE] and pygame.time.get_ticks() - touch_wait > 300 and key_up:
