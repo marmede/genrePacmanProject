@@ -1,2 +1,0 @@
-Finir affichage score
-Finir menu
