@@ -18,7 +18,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		self.direction = "debout"
 		self.last_direction = "debout"
 		self.tire = []
-		self.vitesse = 12
+		self.vitesse = 6
 		self.collision = [False, False, False, False] #UP, DOWN, LEFT, RIGTH
 		self.limite = [0,0,0,0,0,0,0,0]
 		self.taille_tuile = size
@@ -29,70 +29,44 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		if(self.limite[num] == 0):
 			self.limite[num] =  limite
 
-	# def debug(self):
-	# 	for i in range(len(self.limite)):
-	# 		if self.rect.y == self.limite[i]:
-
 
 	def verifCollision(self):
-		self.collision = [False, False, False, False]
-		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#haut_gauche
-			self.collision[0] = True
-			
-		if self.matrice[int((self.rect.x)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":#bas_gauche
-			self.collision[0] = True
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#haut_droit
-			self.collision[1] = True
+		if self.matrice[int((self.rect.x )/self.taille_tuile)+1][int(self.rect.y/self.taille_tuile)] != "0":#GAUCHE
+			self.setLimite(((int((self.rect.x )/self.taille_tuile)+1)*72 - 44),0)
+		else:
+			self.limite[0] = 0
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)] != "0":#bas_droit
-			self.collision[1] = True
+		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#HAUT
+			self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
+		else:
+			self.limite[1] = 0
 
-
-		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#haut_gauche
-			self.setLimite((int(self.rect.y/self.taille_tuile) * 72)+4,2)
-			if self.rect.y < self.limite[2]:
-				self.limite[2] = 0
+		if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)+1] != "0":#BAS
+			self.setLimite((int(self.rect.y/self.taille_tuile)+1)*72 - 56 , 2)
 		else:
 			self.limite[2] = 0
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int(self.rect.y/self.taille_tuile)-1] != "0":#haut_droit
-			self.setLimite((int(self.rect.y/self.taille_tuile) * 72)+4,2)
-			if self.rect.y < self.limite[2]:
-				self.limite[2] = 0
-		else:
-			self.limite[2] = 0
-
-		if self.matrice[int((self.rect.x)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] != "0":#bas_gauche
-			self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+int(72/4.5),3)
-			if self.rect.y > self.limite[3]:
-				self.limite[3] = 0
+		if self.matrice[int((self.rect.x )/self.taille_tuile)-1][int(self.rect.y/self.taille_tuile)] != "0":#DROITE
+			self.setLimite((int((self.rect.x )/self.taille_tuile)-1)*72 + 74,3)
 		else:
 			self.limite[3] = 0
 
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] != "0":#bas_droit
-			if self.limite[3] == 0:
-				self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+16,4)
+		if self.matrice[int((self.rect.x - 1 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER
+			self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
 		else:
-			self.limite[4] = 0
+			self.limite[1] = 0
 
-
-
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#bas_droit
-			if self.limite[2] == 0:
-				self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+4,5)
+		if self.matrice[int((self.rect.x - 33 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER
+			self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
 		else:
-			self.limite[5] = 0
+			self.limite[1] = 0
 
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0":
-			self.limite[5] = 0
-			self.limite[2] = 0
-
-		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0":
-			self.limite[4] = 0
+		if self.matrice[int((self.rect.x +self.rect.w)/self.taille_tuile)-1][int((self.rect.y +self.rect.h)/self.taille_tuile)] != "0":#DEBUGGER GAUCHE
+			self.setLimite((int((self.rect.x + 88 )/self.taille_tuile)-1)*72 + 4,3)
+		else:
 			self.limite[3] = 0
-			
 
 	def deplacer(self, touches, window):
 		self.verifCollision()
@@ -107,25 +81,26 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "dos"
 			self.last_direction = "dos_s"
 			self.numimage += 1
-			if self.rect.y > self.limite[2] and self.rect.y > self.limite[5]:
+			if self.rect.y > self.limite[1] or self.limite[1] == 0:
 				self.rect.y -= self.vitesse * self.boost
 			else:
-				self.rect.y = self.rect.y
+				self.rect.y = self.rect.y			
 
 		elif touches[pygame.K_DOWN]:
 			self.direction = "face"
 			self.last_direction = "face"
 			self.numimage += 1
-			if  self.rect.y != self.limite[3] and self.rect.y != self.limite[4]:
+			if self.rect.y < self.limite[2] or self.limite[2] == 0:
 				self.rect.y += self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
+			
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
 			self.last_direction = "droite_s"
 			self.numimage += 1
-			if not self.collision[1] :
+			if self.limite[0] > self.rect.x or self.limite[0] == 0:
 				self.rect.x += self.vitesse * self.boost
 			else:
 				self.rect.x = self.rect.x
@@ -134,10 +109,10 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 			self.direction = "gauche"
 			self.last_direction = "gauche_s"
 			self.numimage += 1
-			if not self.collision[0]:
+			if self.limite[3] < self.rect.x or self.limite[3] == 0:
 				self.rect.x -= self.vitesse * self.boost
 			else:
-				self.rect.x = self.rect.x
+				self.limite[3] = 0
 				
 		else:
 			self.direction = self.last_direction

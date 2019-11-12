@@ -108,7 +108,7 @@ tire=[]
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 blur.image[0] = pygame.transform.scale(blur.image[0], (x_fen, y_fen))
 fond = ElementGraphiqueAnimee(images["background"],0,0)
-perso = JoueurAnimee(images["luffy"], 250, 100, matrice, taille_tuile)
+perso = JoueurAnimee(images["luffy"], 230, 100, matrice, taille_tuile)
 
 game_over = False
 key_up = True
@@ -126,9 +126,10 @@ while continuer:
 	fond.afficher(fenetre)
 	#Atribution des touches
 	touches = pygame.key.get_pressed()
-	print(perso.collision)
-	print("POSITION ACTUEL : "+str(perso.rect.y))
-	# print("A ne pas depasser : "+str(perso.limite[3]))
+	# print(perso.collision)
+	print("POSITION ACTUEL EN X: "+str(perso.rect.x))
+	print("POSITION ACTUEL EN Y: "+str(perso.rect.y))
+	# # print("A ne pas depasser : "+str(perso.limite[3]))
 	print(perso.limite)
 
 	#304 376
