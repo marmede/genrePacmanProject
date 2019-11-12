@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-
+print("bam")
 cheminInfo = "level0_info.txt"
 nomNiveau = "level0.bin"
 

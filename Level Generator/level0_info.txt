@@ -4,3 +4,4 @@ TUILE_1: mur.png
 TUILE_2: brique.png
 TUILE_3: bois.png
 TUILE_4: eau.png
+TUILE_5: balle.png
