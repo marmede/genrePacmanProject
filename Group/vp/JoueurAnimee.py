@@ -29,16 +29,10 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 		if(self.limite[num] == 0):
 			self.limite[num] =  limite
 
-	def debug(self):
-		for i in range(len(self.limite)):
-			if self.rect.y == self.limite[i]:
-				# if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0":
-				# 	self.limite[5] = 0
-				# 	self.limite[2] = 0
+	# def debug(self):
+	# 	for i in range(len(self.limite)):
+	# 		if self.rect.y == self.limite[i]:
 
-				if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0":
-					self.limite[4] = 0
-					self.limite[3] = 0
 
 	def verifCollision(self):
 		self.collision = [False, False, False, False]
@@ -90,6 +84,14 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 				self.setLimite(((int(self.rect.y/self.taille_tuile))*72)+4,5)
 		else:
 			self.limite[5] = 0
+
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] == "0":
+			self.limite[5] = 0
+			self.limite[2] = 0
+
+		if self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)-1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0" or self.matrice[int((self.rect.x+self.rect.w)/self.taille_tuile)+1][int((self.rect.y+self.rect.h)/self.taille_tuile)+1] == "0":
+			self.limite[4] = 0
+			self.limite[3] = 0
 			
 
 	def deplacer(self, touches, window):
@@ -118,7 +120,6 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 				self.rect.y += self.vitesse * self.boost
 			else:
 				self.rect.y = self.rect.y
-				self.debug()
 
 		elif touches[pygame.K_RIGHT]:
 			self.direction = "droite"
