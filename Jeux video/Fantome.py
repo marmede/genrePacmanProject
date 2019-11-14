@@ -82,7 +82,7 @@ class Fantome(JoueurAnimee):
             else:
                 self.rect.y = self.rect.y           
 
-        elif touches[pygame.K_DOWN]:
+        elif self.rect.y >0:
             self.direction = "face"
             self.last_direction = "face"
             self.numimage += 1

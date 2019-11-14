@@ -191,6 +191,7 @@ while continuer:
                 continuer = 2 if continuer == 1 else 1
                 touch_wait = pygame.time.get_ticks()
 
+        g = Fantome(images["blinky"], 210,100, matrice, taille_tuile)
         for i in range(matW):
                 for j in range(matH):
                         if matrice[i][j] != '0':
@@ -201,6 +202,10 @@ while continuer:
 
         if continuer == 1:
                 perso.deplacer(touches, fenetre)
+
+                print(g.rect.x)
+                g.afficher((fenetre))
+                g.deplacer(touches,fenetre)
 
                 creerballe(touches)
                 creerEnnemies(tour, x_fen)
