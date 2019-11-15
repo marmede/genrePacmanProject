@@ -106,9 +106,9 @@ def creerballe(touches):
         if touches[K_SPACE]:
                 balle.append(BalleAnimee(images["luffy"]["debout"]))
 
-def creerEnnemies(tour,x):
-        if (tour%20) == 0:
-                ennemies.append(BalleAnimee(images["balle"],0,-50))
+#def creerEnnemies(tour,x):
+#        if (tour%20) == 0:
+#                ennemies.append(BalleAnimee(images["balle"],0,-50))
 
 def supprimerElements(tab):
         newTab = []
@@ -150,7 +150,8 @@ images = lireImages();
 balle = []
 ennemies = []
 tire=[]
-ghost = []
+tiles=[]
+ghost = None
 
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
@@ -165,6 +166,16 @@ continuer = 1
 
 #Tour == variable de temps
 tour = 0
+
+for i in range(matW):
+        for j in range(matH):
+                if matrice[i][j] != '0':
+                        tiles.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
+                else:
+                        #print("ghost :", ghost)
+                        if not(ghost):
+                                ghost = Fantome(images["blinky"], i*taille_tuile+1,j*taille_tuile+1, matrice, taille_tuile)
+                        ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
 
 while continuer:
         tour += 1
@@ -191,37 +202,36 @@ while continuer:
                 continuer = 2 if continuer == 1 else 1
                 touch_wait = pygame.time.get_ticks()
 
-        for i in range(matW):
-                for j in range(matH):
-                        if matrice[i][j] != '0':
-                                Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1).afficher(fenetre)
-                        else:
-                                if not(ghost):
-                                        ghost.append(Fantome(images["blinky"], i*taille_tuile,j*taille_tuile, matrice, taille_tuile))
 
         if continuer == 1:
                 perso.deplacer(touches, fenetre)
 
                 creerballe(touches)
-                creerEnnemies(tour, x_fen)
+                #creerEnnemies(tour, x_fen)
 
                 scoreTxt = "Score: {}".format(score)
                 ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
                 perso.afficher(fenetre)
 
-                for f in ghost:
-                        f.afficher(fenetre)
-                        if f.collide(perso):
-                                continuer = 2
+                #print("ghost : ", ghost, ghost[0].rect)
+
+                ghost.afficher(fenetre)
+                ghost.deplacer(touches, fenetre)
+
+                if ghost.collide(perso):
+                        continuer = 2
 
                 #Afficher et deplacer les éléments d'un tableaux 
                 for b in balle:
                         b.afficher(fenetre)
                         b.Deplacer(x_fen, y_fen)
 
+                for t in tiles:
+                        t.afficher(fenetre)
+
                 for e in ennemies:
                         e.afficher(fenetre)
-                        e.Tombe(x_fen, y_fen)
+                        #e.Tombe(x_fen, y_fen)
                         if e.collide(perso):
                                 score += 1
 
@@ -233,11 +243,19 @@ while continuer:
                 if perso.isAlive() == False:
                         game_over = True
 
+                if not ennemies:
+                        for i in range(matW):
+                                for j in range(matH):
+                                        if matrice[i][j] == '0':
+                                                ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
+
         elif continuer > 1:
                 ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
                 perso.afficher(fenetre)
                 for b in balle:
                         b.afficher(fenetre)
+                #for f in ghost:
+                        #f.afficher(fenetre)
 
                 for e in ennemies:
                         e.afficher(fenetre)
@@ -259,6 +277,8 @@ while continuer:
                                 if menutest.rect.collidepoint(mouse):
                                         offsetColor = red
                                         menutest.afficher(fenetre)
+                                        if click[0] and i==0:
+                                                continuer=1
                                         if click[0] and i==4:
                                                 continuer = 0
 
@@ -276,7 +296,6 @@ while continuer:
         balle = supprimerElements(balle) #on gagne
         ennemies = supprimerElements(ennemies) #on perd point
         tire = supprimerElements(tire)
-        ghost = supprimerElements(ghost)
 
         pygame.display.flip()
 

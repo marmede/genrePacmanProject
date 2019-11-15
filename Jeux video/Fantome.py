@@ -23,7 +23,7 @@ class Fantome(JoueurAnimee):
 
     def verifCollision(self):
 
-        if self.matrice[int((self.rect.x )/self.taille_tuile)+1][int(self.rect.y/self.taille_tuile)] != "0":#GAUCHE
+        if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#GAUCHE
             self.setLimite(((int((self.rect.x )/self.taille_tuile)+1)*72 - 44),0)
         else:
             self.limite[0] = 0
@@ -33,7 +33,7 @@ class Fantome(JoueurAnimee):
         else:
             self.limite[1] = 0
 
-        if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)+1] != "0":#BAS
+        if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#BAS
             self.setLimite((int(self.rect.y/self.taille_tuile)+1)*72 - 56 , 2)
         else:
             self.limite[2] = 0
@@ -74,17 +74,17 @@ class Fantome(JoueurAnimee):
 
 
         if touches[pygame.K_UP]:
-            self.direction = "dos"
-            self.last_direction = "dos_s"
+            self.direction = "haut"
+            #self.last_direction = "dos_s"
             self.numimage += 1
             if self.rect.y > self.limite[1] or self.limite[1] == 0:
                 self.rect.y -= self.vitesse * self.boost
             else:
                 self.rect.y = self.rect.y           
 
-        elif touches[pygame.K_DOWN]:
-            self.direction = "face"
-            self.last_direction = "face"
+        elif self.rect.y >0:
+            self.direction = "bas"
+            #self.last_direction = "face"
             self.numimage += 1
             if self.rect.y < self.limite[2] or self.limite[2] == 0:
                 self.rect.y += self.vitesse * self.boost
@@ -93,7 +93,7 @@ class Fantome(JoueurAnimee):
             
 
         elif touches[pygame.K_RIGHT]:
-            self.direction = "droite"
+            self.direction = "droit"
             self.last_direction = "droite_s"
             self.numimage += 1
             if self.limite[0] > self.rect.x or self.limite[0] == 0:
