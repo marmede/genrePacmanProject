@@ -12,9 +12,19 @@ class Tuile():
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
+		self.alive = True
 
 	def afficher(self, window):
 		window.blit(self.image, self.rect)
+
+	def collide(self,other): 
+		if self.rect.colliderect(other.rect): 
+			self.alive = False
+			return True
+		return False
+
+	def isAlive(self):
+		return self.alive
 
 def chargerInfoTuiles(path):
 	file = open(path, "r") #on ouvre le fichier spécifier pour chager les infos
