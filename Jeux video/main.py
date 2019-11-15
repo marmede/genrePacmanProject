@@ -117,17 +117,6 @@ def supprimerElements(tab):
                         newTab.append(e)
         return newTab
 
-def Lire():
-    fichier = open("score.txt","r")
-    highscore = float(fichier.readline())
-    fichier.close()
-    return highscore
-
-def Enregistrer(score):
-    fichier = open("score.txt","w")
-    fichier.write(str(score))
-    fichier.close()
-
 
 pygame.init()
 x_fen = 1008
@@ -185,7 +174,7 @@ for i in range(matW):
                 else:
                         #print("ghost :", ghost)
                         if not(ghost):
-                                ghost = Fantome(images["blinky"], i*taille_tuile+50,j*taille_tuile+2, matrice, taille_tuile)
+                                ghost = Fantome(images["blinky"], i*taille_tuile+1,j*taille_tuile+1, matrice, taille_tuile)
                         ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
 
 while continuer:
@@ -220,6 +209,8 @@ while continuer:
                 creerballe(touches)
                 #creerEnnemies(tour, x_fen)
 
+                scoreTxt = "Score: {}".format(score)
+                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
                 perso.afficher(fenetre)
 
                 #print("ghost : ", ghost, ghost[0].rect)
@@ -257,9 +248,6 @@ while continuer:
                                 for j in range(matH):
                                         if matrice[i][j] == '0':
                                                 ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
-
-                scoreTxt = "Score: {}".format(score)
-                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
 
         elif continuer > 1:
                 ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)

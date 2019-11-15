@@ -14,7 +14,6 @@ class Fantome(JoueurAnimee):
         self.deltaY = randint(-5, 5)
         self.rect.x = x
         self.rect.y = y
-        self.deplacement = False
 
     def afficher(self, window):
         self.numimage += 1
@@ -22,29 +21,10 @@ class Fantome(JoueurAnimee):
             self.numimage = (self.numimage)%len(self.image[self.direction])
             window.blit(self.image[self.direction][self.numimage],self.rect)
 
-    def pix2case(self, x, y):
-        i = y/72
-        j = x/72
-        return i, j
-
-    def veri2(self):
-        ok = True
-        icase, jcase = self.pix2case(self.rect.x, self.rect.y)
-        if self.matrice[int(icase)+1][int(jcase)]!= "0":
-            ok=False
-        return ok
-
-    def deplacer2(self):
-        ok = self.veri2()
-        if ok:
-            self.direction = "droit"
-            self.rect.x += self.vitesse*self.boost
-
-
     def verifCollision(self):
 
         if self.matrice[int((self.rect.x )/self.taille_tuile)][int(self.rect.y/self.taille_tuile)] != "0":#GAUCHE
-            self.setLimite(((int((self.rect.y)/self.taille_tuile)+1)*72 - 44),0)
+            self.setLimite(((int((self.rect.x )/self.taille_tuile)+1)*72 - 44),0)
         else:
             self.limite[0] = 0
 
@@ -58,14 +38,14 @@ class Fantome(JoueurAnimee):
         else:
             self.limite[2] = 0
 
-        if self.matrice[int((self.rect.y )/self.taille_tuile)-1][int(self.rect.x/self.taille_tuile)] != "0":#DROITE
-            self.setLimite((int((self.rect.y)/self.taille_tuile)-1),3)
+        if self.matrice[int((self.rect.x )/self.taille_tuile)-1][int(self.rect.y/self.taille_tuile)] != "0":#DROITE
+            self.setLimite((int((self.rect.x )/self.taille_tuile)-1)*72 + 74,3)
         else:
             self.limite[3] = 0
 
 
         if self.matrice[int((self.rect.x - 1 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER BAS
-            self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 74,1)
+            self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
         else:
             self.limite[1] = 0
 
