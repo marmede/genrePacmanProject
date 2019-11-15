@@ -118,15 +118,19 @@ def supprimerElements(tab):
 			newTab.append(e)
 	return newTab
 
-def Lire():
-	fichier = open("score.txt","r")
-	highscore = float(fichier.readline())
-	fichier.close()
-	return highscore
+def lireScore():
+	fichier = open("niveau/score.txt","r")
+	data = fichier.read()
 
-def Enregistrer(score):
-	fichier = open("score.txt","w")
-	fichier.write(str(score))
+	data = data.split("\n")
+	data.sort()
+
+	fichier.close()
+	return data[1:6]
+
+def sauverScore(score):
+	fichier = open("niveau/score.txt","a")
+	fichier.write(str(score)+'\n')
 	fichier.close()
 
 
@@ -150,7 +154,15 @@ yellow = (255, 255, 0)
 font = pygame.font.Font(None, 34)
 sTxt = 72
 menuFont = pygame.font.Font(None, sTxt)
-menuTxt = ["JOUER", "CLASSEMENT", "EDITEUR NIVEAU", "OPTIONS", "QUITTER"]
+menuTxtFR = ["JOUER", "CLASSEMENT", "EDITEUR NIVEAU", "OPTIONS", "QUITTER"]
+menuTxtES = ["JUGAR", "CLASIFICACIÓN", "EDITOR DE NIVEL", "OPCIONES", "SALIR"]
+menuTxtEN = ["PLAY", "RANKING", "LEVEL EDITOR", "OPTIONS", "EXIT"]
+menuTxt = menuTxtFR
+optionTxt = ["FRANCAIS", "ESPANOL", "ENGLISH", "RETOUR"]
+topScore = lireScore()
+topScore.append("RETOUR")
+print(topScore)
+dicoMenu = {"menu": menuTxt, "options": optionTxt, "classement": topScore, "fr": menuTxtFR, "en": menuTxtEN, "es": menuTxtES}
 
 images = lireImages();
 #Les tableaux des éléments
@@ -254,12 +266,10 @@ while continuer:
 
 		scoreTxt = "Score: {}".format(score)
 		ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
-	elif etat == "menu":
-		retour = menuJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt)
-		if retour == "JOUER":
-			etat = "jeu"
-		elif retour == "QUITTER":
-			continuer = 0
+	elif etat == "menu" or etat == "options" or etat == "classement":
+		etat, dico = menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dicoMenu)
+	elif etat == "editeur":
+		exec(open("Editeur.py").read())
 
 	######################################
 
@@ -274,7 +284,9 @@ while continuer:
 
 	for event in pygame.event.get():
 		tire, images = perso.shoot(touches, event, tire, images)
-		if event.type == pygame.QUIT:
+		if event.type == pygame.QUIT or etat == "quitter":
 			continuer = 0
+	if continuer == 0:
+		sauverScore(score)
 
 pygame.quit()

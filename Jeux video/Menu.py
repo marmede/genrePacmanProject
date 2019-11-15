@@ -3,7 +3,7 @@ from pygame.locals import *
 from ElementGraphique import ElementGraphique
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 
-def menuJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt):
+def menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt):
 	blur.afficher(fenetre)
 	click = pygame.mouse.get_pressed()
 	mouse = pygame.mouse.get_pos()
@@ -26,10 +26,45 @@ def menuJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt):
 		#si le text est en collision avec la position de la souris
 		if menu.rect.collidepoint(mouse):
 			menu.afficher(fenetre)
+			offsetColor = blue
 			if click[0]:
 				return menuTxt[i]
-			offsetColor = blue
 		#sinon on remet la couleur d'avant
 		else:
 			offsetColor = blue
 	return ""
+
+def menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dico):
+	if etat == "menu":
+		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["menu"])
+		if retour == dico["menu"][0]:
+			etat = "jeu"
+		elif retour == dico["menu"][1]:
+			etat = "classement"
+		elif retour == dico["menu"][2]:
+			etat = "editeur"
+		elif retour == dico["menu"][3]:
+			etat = "options"
+			touch_wait = pygame.time.get_ticks()
+		elif retour == dico["menu"][4]:
+			etat = "quitter"
+	elif etat == "options":
+		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["options"])
+		if retour == "FRANÇAIS":
+			dico["options"][3] = "RETOUR"
+			dico["menu"] = dico["fr"]
+			etat = "menu"
+		elif retour == "ESPAÑOL":
+			dico["options"][3] = "VOLVER" 
+			dico["menu"] = dico["es"]
+			etat = "menu"
+		elif retour == "ENGLISH":
+			dico["options"][3] = "BACK"
+			dico["menu"] = dico["en"]
+		elif retour == dico["options"][3]:
+			etat = "menu"
+	elif etat == "classement":
+		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["classement"])
+		if retour == "RETOUR":
+			etat = "menu"
+	return etat, dico
