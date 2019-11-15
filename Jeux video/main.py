@@ -174,7 +174,7 @@ for i in range(matW):
                 else:
                         #print("ghost :", ghost)
                         if not(ghost):
-                                ghost = Fantome(images["blinky"], i*taille_tuile+1,j*taille_tuile+1, matrice, taille_tuile)
+                                ghost = Fantome(images["blinky"], i*taille_tuile+50,j*taille_tuile+2, matrice, taille_tuile)
                         ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
 
 while continuer:
