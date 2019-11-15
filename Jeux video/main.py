@@ -217,15 +217,9 @@ while continuer:
         if continuer == 1:
                 perso.deplacer(touches, fenetre)
 
-                print(g.rect.x)
-                g.afficher((fenetre))
-                g.deplacer(touches,fenetre)
-
                 creerballe(touches)
                 #creerEnnemies(tour, x_fen)
 
-                scoreTxt = "Score: {}".format(score)
-                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
                 perso.afficher(fenetre)
 
                 #print("ghost : ", ghost, ghost[0].rect)
@@ -263,6 +257,9 @@ while continuer:
                                 for j in range(matH):
                                         if matrice[i][j] == '0':
                                                 ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
+
+                scoreTxt = "Score: {}".format(score)
+                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
 
         elif continuer > 1:
                 ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)

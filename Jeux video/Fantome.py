@@ -82,9 +82,9 @@ class Fantome(JoueurAnimee):
             else:
                 self.rect.y = self.rect.y           
 
+        elif self.rect.y >0:
             self.direction = "bas"
             #self.last_direction = "face"
-        elif self.rect.y >0:
             self.numimage += 1
             if self.rect.y < self.limite[2] or self.limite[2] == 0:
                 self.rect.y += self.vitesse * self.boost
