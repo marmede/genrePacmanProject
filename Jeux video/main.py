@@ -117,6 +117,17 @@ def supprimerElements(tab):
                         newTab.append(e)
         return newTab
 
+def Lire():
+    fichier = open("score.txt","r")
+    highscore = float(fichier.readline())
+    fichier.close()
+    return highscore
+
+def Enregistrer(score):
+    fichier = open("score.txt","w")
+    fichier.write(str(score))
+    fichier.close()
+
 
 pygame.init()
 x_fen = 1008
