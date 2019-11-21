@@ -118,6 +118,7 @@ def supprimerElements(tab):
 			newTab.append(e)
 	return newTab
 
+<<<<<<< HEAD
 def lireScore():
 	fichier = open("niveau/score.txt","r")
 	data = fichier.read()
@@ -133,6 +134,8 @@ def sauverScore(score):
 	fichier.write(str(score)+'\n')
 	fichier.close()
 
+=======
+>>>>>>> master
 
 pygame.init()
 x_fen = 1008
@@ -198,6 +201,7 @@ for i in range(matW):
 			ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
 
 while continuer:
+<<<<<<< HEAD
 	tour += 1
 	framerate = pygame.time.Clock()
 	Fps = framerate.tick(35)
@@ -288,5 +292,132 @@ while continuer:
 			continuer = 0
 	if continuer == 0:
 		sauverScore(score)
+=======
+        tour += 1
+        framerate = pygame.time.Clock()
+        Fps = framerate.tick(35)
+        #Affichage images
+        fond.afficher(fenetre)
+        #Atribution des touches
+        touches = pygame.key.get_pressed()
+        #Attribution de la souris et de son click
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        #print(perso.collision)
+        #print("POSITION ACTUEL EN X: "+str(perso.rect.x))
+        #print("POSITION ACTUEL EN Y: "+str(perso.rect.y))
+        # # print("A ne pas depasser : "+str(perso.limite[3]))
+        #print(perso.limite)
+
+        #304 376
+        if not touches[pygame.K_ESCAPE]:
+                key_up = True
+        if touches[pygame.K_ESCAPE] and pygame.time.get_ticks() - touch_wait > 300 and key_up:
+                key_up = False
+                continuer = 2 if continuer == 1 else 1
+                touch_wait = pygame.time.get_ticks()
+
+
+        if continuer == 1:
+                perso.deplacer(touches, fenetre)
+
+                creerballe(touches)
+                #creerEnnemies(tour, x_fen)
+
+                scoreTxt = "Score: {}".format(score)
+                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
+                perso.afficher(fenetre)
+
+                #print("ghost : ", ghost, ghost[0].rect)
+
+                ghost.afficher(fenetre)
+                ghost.deplacer(touches, fenetre)
+
+                if ghost.collide(perso):
+                        continuer = 2
+
+                #Afficher et deplacer les éléments d'un tableaux 
+                for b in balle:
+                        b.afficher(fenetre)
+                        b.Deplacer(x_fen, y_fen)
+
+                for t in tiles:
+                        t.afficher(fenetre)
+
+                for e in ennemies:
+                        e.afficher(fenetre)
+                        #e.Tombe(x_fen, y_fen)
+                        if e.collide(perso):
+                                score += 1
+
+                for t in tire:
+                        t.afficher(fenetre)
+                        t.Tire(x_fen, y_fen)
+
+                #Mort du perso
+                if perso.isAlive() == False:
+                        game_over = True
+
+                if not ennemies:
+                        for i in range(matW):
+                                for j in range(matH):
+                                        if matrice[i][j] == '0':
+                                                ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
+
+        elif continuer > 1:
+                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
+                perso.afficher(fenetre)
+                for b in balle:
+                        b.afficher(fenetre)
+                #for f in ghost:
+                        #f.afficher(fenetre)
+
+                for e in ennemies:
+                        e.afficher(fenetre)
+
+                for t in tire:
+                        t.afficher(fenetre)
+                blur.afficher(fenetre)
+
+                if continuer == 2:
+                        s = len(menuTxt)
+                        for i in range(s):
+                                wTxt, hTxt = menuFont.size(menuTxt[i])
+                                xTxt = (x_fen - wTxt) / 2
+                                yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
+                                menutest = ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset)
+                                menutest.afficher(fenetre)
+                                menutestombre = ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
+                                #si le text est en collision avec la position de la souris
+                                if menutest.rect.collidepoint(mouse):
+                                        offsetColor = red
+                                        menutest.afficher(fenetre)
+                                        if click[0] and i==0:
+                                                continuer=1
+                                        if click[0] and i==4:
+                                                continuer = 0
+
+                                #sinon on remet la couleur d'avant
+                                else:
+                                        offsetColor = blue
+                elif continuer == 3:
+                        ben_reste_code = True
+
+        ######################################
+
+        ######################################
+
+        #Suppressions des éléments inutiles (mort ou hors écran)
+        balle = supprimerElements(balle) #on gagne
+        ennemies = supprimerElements(ennemies) #on perd point
+        tire = supprimerElements(tire)
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+                tire, images = perso.shoot(touches, event, tire, images)
+                if event.type == pygame.QUIT:
+                        continuer = 0
+>>>>>>> master
 
 pygame.quit()

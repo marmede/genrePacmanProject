@@ -14,6 +14,7 @@ class Fantome(JoueurAnimee):
         self.deltaY = randint(-5, 5)
         self.rect.x = x
         self.rect.y = y
+        self.deplacement = False
 
     def afficher(self, window):
         self.numimage += 1
@@ -49,7 +50,7 @@ class Fantome(JoueurAnimee):
         else:
             self.limite[1] = 0
 
-        if self.matrice[int((self.rect.x - 26 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER HAUT
+        if self.matrice[int((self.rect.x - 34 +self.rect.w)/self.taille_tuile)][int((self.rect.y+self.rect.h)/self.taille_tuile)-1] != "0":#DEBUGGER HAUT
             self.setLimite((int(self.rect.y/self.taille_tuile))*72 + 4,1)
         else:
             self.limite[1] = 0
