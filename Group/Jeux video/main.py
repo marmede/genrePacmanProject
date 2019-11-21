@@ -34,7 +34,6 @@ def lireImages():
         images = {}
         images["blur"] = [pygame.image.load("images/blur.png").convert_alpha()]
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
-        images["balle"] = resizeImgTab(images["balle"], 45, 45)
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
         images["luffy"] = {}
@@ -110,9 +109,15 @@ def lireImages():
         images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
         return images
 
-def creerballe(touches):
-        if touches[K_SPACE]:
-                balle.append(BalleAnimee(images["luffy"]["debout"]))
+def creerballe(niveau,fenetre):
+        i = 0
+        for y in range(len(niveau.tab)):
+                for x in range(len(niveau.tab[y])):
+                        if niveau.tab[y][x] == 0:
+                                if (i%2) == 0:
+                                        balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
+                                i += 1
+        
 
 #def creerEnnemies(tour,x):
 #        if (tour%20) == 0:
@@ -159,7 +164,7 @@ fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
 niveau = Niveau("niveau/niveauTest.txt",images["mur"])
 niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
-
+creerballe(niveau,fenetre)
 
 game_over = False
 key_up = True
@@ -184,11 +189,13 @@ while continuer:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         perso.deplacer(niveau,touches, fenetre)
+
+        print(niveau.tab[2][2])
         
         #Afficher et deplacer les éléments d'un tableaux 
         for b in balle:
                 b.afficher(fenetre)
-                b.Deplacer(x_fen, y_fen)
+                # b.Deplacer(x_fen, y_fen)
 
         for t in tiles:
                 t.afficher(fenetre)
