@@ -140,6 +140,11 @@ def supprimerElements2D(tab):
                 l.append(tab)
         return tab
 
+def Enregistrer(score,text):
+        fichier = open("score.txt","w")
+        fichier.write(text+ " "+ str(score))
+        fichier.close
+
 
 pygame.init()
 x_fen = 1184
@@ -160,6 +165,7 @@ ghost = None
 
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
+images["mur"] = resizeImg(images["mur"], 4, 30, 30)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
 niveau = Niveau("niveau/niveauTest.txt",images["mur"])
@@ -174,6 +180,12 @@ continuer = 1
 #Tour == variable de temps
 tour = 0
 pos= []
+score = 0
+
+etat = "jeu"
+
+text = ''
+
 
 while continuer:
         tour += 1
@@ -188,35 +200,42 @@ while continuer:
         #Attribution de la souris et de son click
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        perso.deplacer(niveau,touches, fenetre)
 
         print(niveau.tab[2][2])
         
-        #Afficher et deplacer les éléments d'un tableaux 
-        for b in balle:
-                b.afficher(fenetre)
-                # b.Deplacer(x_fen, y_fen)
+        if etat == "jeu":
+                niveau.afficherLab(images["mur"],fenetre)
+                perso.afficher(fenetre)
+                perso.deplacer(niveau,touches, fenetre)
+                score += 1
+                #Afficher et deplacer les éléments d'un tableaux 
+                for b in balle:
+                        b.afficher(fenetre)
+                        # b.Deplacer(x_fen, y_fen)
 
-        for t in tiles:
-                t.afficher(fenetre)
+                for t in tiles:
+                        t.afficher(fenetre)
 
-        for e in ennemies:
-                e.afficher(fenetre)
-                #e.Tombe(x_fen, y_fen)
-                if e.collide(perso):
-                        score += 1
+                for e in ennemies:
+                        e.afficher(fenetre)
+                        #e.Tombe(x_fen, y_fen)
+                        if e.collide(perso):
+                                score += 1
 
-        for t in tire:
-                t.afficher(fenetre)
-                t.Tire(x_fen, y_fen)
+                for t in tire:
+                        t.afficher(fenetre)
+                        t.Tire(x_fen, y_fen)
 
-        #Mort du perso
-        if perso.isAlive() == False:
-                game_over = True
+                ######################################
+                if perso.PixToCase(niveau) == 3:
+                        print("push")
 
-        ######################################
-        if perso.PixToCase(niveau) == 3:
-                print("push")
+                if perso.isAlive() == False or touches[pygame.K_ESCAPE]:
+                        etat = "perdu"
+                        text = ''
+        if etat == "perdu":
+                etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat)
+                Enregistrer(score, text)
 
         ######################################
 
