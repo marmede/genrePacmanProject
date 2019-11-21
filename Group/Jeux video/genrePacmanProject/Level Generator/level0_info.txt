@@ -1,0 +1,6 @@
+NB_TUILE: 4
+TAILLE_TUILE: 72
+TUILE_1: mur.png
+TUILE_2: brique.png
+TUILE_3: bois.png
+TUILE_4: eau.png
