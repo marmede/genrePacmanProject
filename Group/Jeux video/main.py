@@ -10,6 +10,7 @@ from BonusAnimee import BonusAnimee
 from BalleTiree import BalleTiree
 from Niveau import *
 from Fantome import Fantome
+from GameOver import *
 
 def resizeImgTab(tab, largeur, hauteur):
         newTab =[]
@@ -161,7 +162,7 @@ tire=[]
 tiles=[]
 ghost = None
 
-
+font = pygame.font.Font(None, 34)
 
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
@@ -193,8 +194,6 @@ while continuer:
         Fps = framerate.tick(35)
         #Affichage images
         fond.afficher(fenetre)
-        niveau.afficherLab(images["mur"],fenetre)
-        perso.afficher(fenetre)
         #Atribution des touches
         touches = pygame.key.get_pressed()
         #Attribution de la souris et de son click
@@ -232,9 +231,9 @@ while continuer:
 
                 if perso.isAlive() == False or touches[pygame.K_ESCAPE]:
                         etat = "perdu"
-                        text = ''
+                        text = 'b'
         if etat == "perdu":
-                etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat)
+                etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
                 Enregistrer(score, text)
 
         ######################################
