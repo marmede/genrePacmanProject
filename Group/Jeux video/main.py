@@ -10,7 +10,6 @@ from BonusAnimee import BonusAnimee
 from BalleTiree import BalleTiree
 from Niveau import *
 from Fantome import Fantome
-from GameOver import *
 
 def resizeImgTab(tab, largeur, hauteur):
         newTab =[]
@@ -21,14 +20,20 @@ def resizeImgTab(tab, largeur, hauteur):
         return newTab
 
 def resizeImg(tab, numImg, largeur, hauteur):
-        tab[numImg] = pygame.transform.scale(tab[numImg], (largeur,hauteur))
-        return tab
+        compt = 0
+        newTab =[]
+        for img in tab:
+                compt +=1
+                if compt == numImg:
+                        img = pygame.transform.scale(img, (largeur,hauteur))
+                newTab.append(img)
+
+        return newTab
 
 def lireImages():
         images = {}
         images["blur"] = [pygame.image.load("images/blur.png").convert_alpha()]
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
-        images["balle"] = resizeImgTab(images["balle"], 45, 45)
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
         images["luffy"] = {}
@@ -74,7 +79,6 @@ def lireImages():
         images["mur"].append(pygame.image.load("images/Mur/brique.png"))
         images["mur"].append(pygame.image.load("images/Mur/eau.png"))
         images["mur"].append(pygame.image.load("images/Mur/mur.png"))
-        images["mur"].append(pygame.image.load("images/black-hole.png").convert_alpha())
         #images["mur"].append(pygame.image.load("images/Mur/"))
 
 
@@ -105,9 +109,15 @@ def lireImages():
         images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
         return images
 
-def creerballe(touches):
-        if touches[K_SPACE]:
-                balle.append(BalleAnimee(images["luffy"]["debout"]))
+def creerballe(niveau,fenetre):
+        i = 0
+        for y in range(len(niveau.tab)):
+                for x in range(len(niveau.tab[y])):
+                        if niveau.tab[y][x] == 0:
+                                if (i%2) == 0:
+                                        balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
+                                i += 0
+        
 
 #def creerEnnemies(tour,x):
 #        if (tour%20) == 0:
@@ -130,10 +140,6 @@ def supprimerElements2D(tab):
                 l.append(tab)
         return tab
 
-def Enregistrer(score,text):
-        fichier = open("score.txt","w")
-        fichier.write(text+ " "+ str(score))
-        fichier.close
 
 pygame.init()
 x_fen = 1184
@@ -150,17 +156,15 @@ tire=[]
 tiles=[]
 ghost = None
 
-font = pygame.font.Font(None, 34)
+
 
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
-print(images["mur"][4])
-images["mur"] = resizeImg(images["mur"], 4, 30, 30)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
 niveau = Niveau("niveau/niveauTest.txt",images["mur"])
 niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
-
+creerballe(niveau,fenetre)
 
 game_over = False
 key_up = True
@@ -170,11 +174,6 @@ continuer = 1
 #Tour == variable de temps
 tour = 0
 pos= []
-score = 0
-
-etat = "jouer"
-
-text = ''
 
 while continuer:
         tour += 1
@@ -182,50 +181,43 @@ while continuer:
         Fps = framerate.tick(35)
         #Affichage images
         fond.afficher(fenetre)
+        niveau.afficherLab(images["mur"],fenetre)
+        perso.afficher(fenetre)
         #Atribution des touches
         touches = pygame.key.get_pressed()
         #Attribution de la souris et de son click
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
+        perso.deplacer(niveau,touches, fenetre)
 
-        if etat == "jouer":
-                niveau.afficherLab(images["mur"],fenetre)
-                perso.afficher(fenetre)
-                perso.deplacer(niveau,touches, fenetre)
-                score += 1
-                #Afficher et deplacer les éléments d'un tableaux 
-                for b in balle:
-                        b.afficher(fenetre)
-                        b.Deplacer(x_fen, y_fen)
+        print(niveau.tab[2][2])
+        
+        #Afficher et deplacer les éléments d'un tableaux 
+        for b in balle:
+                b.afficher(fenetre)
+                # b.Deplacer(x_fen, y_fen)
 
-                for t in tiles:
-                        t.afficher(fenetre)
+        for t in tiles:
+                t.afficher(fenetre)
 
-                for e in ennemies:
-                        e.afficher(fenetre)
-                        #e.Tombe(x_fen, y_fen)
-                        if e.collide(perso):
-                                score += 1
+        for e in ennemies:
+                e.afficher(fenetre)
+                #e.Tombe(x_fen, y_fen)
+                if e.collide(perso):
+                        score += 1
 
-                for t in tire:
-                        t.afficher(fenetre)
-                        t.Tire(x_fen, y_fen)
+        for t in tire:
+                t.afficher(fenetre)
+                t.Tire(x_fen, y_fen)
 
-                #Mort du perso
-                if perso.isAlive() == False:
-                        game_over = True
+        #Mort du perso
+        if perso.isAlive() == False:
+                game_over = True
 
-                ######################################
-                if perso.PixToCase(niveau) == 3:
-                        print("push")
+        ######################################
+        if perso.PixToCase(niveau) == 3:
+                print("push")
 
-                if perso.isAlive() == False or touches[pygame.K_ESCAPE]:
-                        etat = "perdu"
-                        text = ''
-
-        if etat == "perdu":
-                etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat)
-                Enregistrer(score, text)
         ######################################
 
         #Suppressions des éléments inutiles (mort ou hors écran)
