@@ -117,7 +117,7 @@ def creerballe(niveau,fenetre):
                         if niveau.tab[y][x] == 0:
                                 if (i%2) == 0:
                                         balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
-                                i += 0
+                                i += 1
         
 
 #def creerEnnemies(tour,x):
@@ -231,7 +231,7 @@ while continuer:
 
                 if perso.isAlive() == False or touches[pygame.K_ESCAPE]:
                         etat = "perdu"
-                        text = 'b'
+                        text = ''
         if etat == "perdu":
                 etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
                 Enregistrer(score, text)
