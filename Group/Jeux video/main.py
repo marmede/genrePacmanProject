@@ -117,10 +117,14 @@ def creerballe(niveau,fenetre, img):
                                 trou.append(ElementGraphique(img, (32*x), (32*y)))
 
         
-
-#def creerEnnemies(tour,x):
-#        if (tour%20) == 0:
-#                ennemies.append(BalleAnimee(images["balle"],0,-30))
+def creerEnnemies(niveau):
+        i = 0
+        for y in range(len(niveau.tab)):
+                for x in range(len(niveau.tab[y])):
+                        if niveau.tab[y][x] == 0:
+                                if (i%452) == 0:
+                                        ennemies.append(Fantome(images["blinky"],(32 * x)+8,(32 * y)+8))
+                                i += 1
 
 def supprimerElements(tab):
         newTab = []
@@ -184,6 +188,8 @@ perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
 niveau = Niveau("niveau/niveauTest.txt",images["mur"])
 niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
 creerballe(niveau,fenetre, images["mur"][4])
+creerEnnemies(niveau)
+
 
 game_over = False
 key_up = True
@@ -212,7 +218,6 @@ while continuer:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
-        print(niveau.tab[2][2])
         
         if etat == "jeu":
                 niveau.afficherLab(images["mur"],fenetre)
@@ -235,7 +240,7 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
-                        #e.Tombe(x_fen, y_fen)
+                        e.Tombe(x_fen, y_fen)
 
                 for t in tire:
                         t.afficher(fenetre)
