@@ -30,6 +30,7 @@ def lireImages():
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
+        images["chomp"] = resizeImgTab(images["chomp"], 32, 32)
         images["luffy"] = {}
         images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
         images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
@@ -241,7 +242,7 @@ while continuer:
                         t.Tire(x_fen, y_fen)
 
                 scoreEcran = "Score: {}".format(score)
-                scoreMenu = ElementGraphique(font.render(scoreEcran, True, (255, 255, 0)), x_fen/2-70, y_fen/3-70)
+                scoreMenu = ElementGraphique(font.render(scoreEcran, True, (255, 255, 0)), x_fen/2-70, 30)
                 scoreMenu.afficher(fenetre)
                 ######################################
                 if perso.PixToCase(niveau) == 3:
@@ -268,22 +269,8 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
-                # tire, images = perso.shoot(touches, event, tire, images)
+                tire, images = perso.shoot(touches, event, tire, images)
                 if event.type == pygame.QUIT:
                         continuer = 0
 
 pygame.quit()
-
-
-        # print("HAUT")
-        # print(perso.PixToCase(niveau,0,24,0,-1))
-        # print(perso.PixToCase(niveau,14,24,0,-1))
-        # print("BAS")
-        # print(perso.PixToCase(niveau,0,0,0,1))
-        # print(perso.PixToCase(niveau,14,0,0,1))
-        # print("GAUCHE")
-        # print(perso.PixToCase(niveau,24,0,-1,0))
-        # print(perso.PixToCase(niveau,24,16,-1,0))
-        # print("DROITE")
-        # print(perso.PixToCase(niveau,-16,0,1,0))
-        # print(perso.PixToCase(niveau,-16,16,1,0))

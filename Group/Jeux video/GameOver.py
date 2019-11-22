@@ -15,8 +15,8 @@ def menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat, contin
 		entrerMenuImg = ElementGraphique(font.render(entrerMenu, True, (255,255,255)), x_fen/2-205, y_fen/2)
 		entrerMenuImg.afficher(fenetre)
 		for event in pygame.event.get():
-			# if event.type == pygame.QUIT:
-			# 	continuer = 0
+			if event.type == pygame.QUIT:
+				continuer = 0
 			if event.type == KEYDOWN and event.key != K_RETURN:
 				print("bando hein")
 				text += event.unicode
