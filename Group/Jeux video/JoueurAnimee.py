@@ -18,30 +18,17 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.direction = "debout"
                 self.last_direction = "debout"
                 self.tire = []
-                self.vitesse = 7
+                self.vitesse = 6
                 self.collision = [False, False, False, False]
-                self.block = []
                 self.rect_bas = pygame.Rect((self.rect.x,self.rect.y + self.rect.h),(30,1))
                 self.rect_haut = pygame.Rect((self.rect.x,self.rect.y),(30,1))
                 self.rect_droite = pygame.Rect((self.rect.x + self.rect.w + 3,self.rect.y),(1,30))
                 self.rect_gauche = pygame.Rect((self.rect.x - 3,self.rect.y),(1,30))
 
-
-        def setLimite(self,limite,num):
-                if(self.limite[num] == 0):
-                        self.limite[num] =  limite
-
         def PixToCase(self,niveau,dx=0,dy=0,x=0,y=0):
                 x_start = int((self.rect.x+dx)/32) + x
                 y_start = int((self.rect.y+dy)/32) + y
                 return niveau.tab[y_start][x_start]
-
-        def SelectBlock(self,tab,mur,rect):
-        	x = int(rect.x / 72)
-        	y = int(rect.y / 72)
-
-        	if tab[y][x] == 3:
-        		return x,y
 
         def VerifCollision(self,niveau):
                 # print("HAUT")
@@ -77,25 +64,18 @@ class JoueurAnimee(ElementGraphiqueAnimee):
         			else:
         				self.boost = 1
 
-        def PushBlock(self,tab,mur):
-        		tabrect = [self.rect_gauche,self.rect_droite,self.rect_haut,self.rect_bas]
-        		for rect in tabrect:
-        			block = self.SelectBlock(tab,mur,rect)
-        			if block:
-        				pass
+        def PushBlock(self,niveau):
+                if self.PixToCase(niveau) == 3:
+                        niveau.Update(self)
 
         def move(self,dx=0,dy=0):
                 self.rect.x += dx * self.boost
                 self.rect.y += dy * self.boost
-                # tab = []
-                # tab.append(dx)
-                # tab.append(dy)
-                # return tab
 
         def deplacer(self,niveau, touches, window):
                 self.VerifCollision(niveau)
                 self.Cooldown(niveau)
-                block = self.PushBlock(niveau.tab,niveau.tab_mur)
+                self.PushBlock(niveau)
 
                 self.rect_bas.x = self.rect.x
                 self.rect_bas.y = self.rect.y + self.rect.h
@@ -115,6 +95,19 @@ class JoueurAnimee(ElementGraphiqueAnimee):
 
                 if self.rect.y <= 0 or self.rect.y >= hauteur-self.rect.h :
                         self.deltaY = - self.deltaY
+
+                if self.rect.x <= 0:
+                    self.collision[3] = True
+
+
+                if self.rect.x >= 1184-16:
+                    self.collision[2] = True
+
+                if self.rect.y <= 0:
+                    self.collision[0] = True
+
+                if self.rect.y >= 624:
+                    self.collision[1] = True
 
                 if touches[pygame.K_UP]:
                         self.direction = "dos"

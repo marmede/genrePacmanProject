@@ -43,16 +43,48 @@ class Niveau(ElementGraphiqueAnimee):
         rect = imMur[0].get_rect()
         self.mur = []
         for i in range(len(self.tab)):
+            l = []
             for j in range(len(self.tab[i])):
                 t = Tuile(imMur[self.tab[i][j]],j*rect.w,i*rect.h)
                 fenetre.blit(t.image,(t.rect.x, t.rect.y))
                 if(self.tab[i][j] == 0):
                     t.plein = False
                 if(self.tab[i][j] == 1):
-                    self.tab_mur.append(t)
+                    l.append(t)
+            self.tab_mur.append(l)
 
-    def Update(self,fenetre,imMur,y,x):
-        self.tab[y][x] = 0
+    def PersoDirection(self,perso):
+        if(perso.direction == "dos" or perso.last_direction == "dos_s" ):
+                return 0,-1
+        elif(perso.direction == "face" or perso.last_direction == "debout"):
+                return 0,1
+        elif(perso.direction == "droite" or perso.last_direction == "droite_s"):
+                return 1,0
+        elif(perso.direction == "gauche" or perso.last_direction == "gauche_s"):
+                return -1,0
+
+    def Update(self,perso):
+        x,y = self.PersoDirection(perso)
+        x_start = int((perso.rect.x)/32) 
+        y_start = int((perso.rect.y)/32)
+        nx = x_start + x
+        ny = y_start + y
+        if(self.tab[ny][nx] == 0):
+            self.tab[ny][nx] = self.tab[y_start][x_start] 
+            self.tab[y_start][x_start]  = 0
+
+        if(self.tab[ny][nx] == 2):
+            self.tab[y_start][x_start] = 0
+            self.tab[ny][nx] = 0
+
+
+
+        # if(self.tab[ny][nx] == 3) and self.tab[ny+(2*y)][nx+(2*x)] != 1 and self.tab[ny+y][nx+x] != 1:
+            # # self.tab[ny+(2*y)][nx+(2*x)] = self.tab[ny+y][nx+x]
+            # self.tab[ny+y][nx+x] = self.tab[ny][nx]
+            # self.tab[y_start][x_start]  = 0
+            # self.tab[ny+(2*y)][nx+(2*x)] = 0
+
 
     def createLab(self,hauteur, largeur, hautCase,largCase):
 
@@ -79,3 +111,10 @@ class Niveau(ElementGraphiqueAnimee):
                     for y in range(lCase):
                         fichier.write('0')
                     fichier.write('\n')
+
+
+
+
+    # def Update(self,y,x):
+    #   self.tab[y][x+1] = self.tab[y][x]
+        # self.tab[y][x] = 0
