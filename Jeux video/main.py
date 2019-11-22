@@ -34,7 +34,6 @@ def lireImages():
         images = {}
         images["blur"] = [pygame.image.load("images/blur.png").convert_alpha()]
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
-        images["balle"] = resizeImgTab(images["balle"], 45, 45)
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
         images["luffy"] = {}
@@ -75,40 +74,54 @@ def lireImages():
         images["luffy"]["dos"].append(pygame.image.load("images/Luffy/row-4-col-5.png").convert_alpha())
         images["luffy"]["dos_s"].append(pygame.image.load("images/Luffy/row-4-col-1.png").convert_alpha())
 
+        images["mur"] = []
+        images["mur"].append(pygame.image.load("images/Mur/bois.png"))
+        images["mur"].append(pygame.image.load("images/Mur/brique.png"))
+        images["mur"].append(pygame.image.load("images/Mur/eau.png"))
+        images["mur"].append(pygame.image.load("images/Mur/mur.png"))
+        #images["mur"].append(pygame.image.load("images/Mur/"))
+
+
         images["blinky"] = {}
 
-        images["blinky"]["debout"] = [pygame.image.load("images/blinky-b-1.png").convert_alpha()]
+        images["blinky"]["debout"] = [pygame.image.load("images/Fantomes/Blinky/blinky-b-1.png").convert_alpha()]
 
         images["blinky"]["haut"] = []
-        images["blinky"]["haut"].append(pygame.image.load("images/blinky-t-1.png").convert_alpha())
-        images["blinky"]["haut"].append(pygame.image.load("images/blinky-t-2.png").convert_alpha())
+        images["blinky"]["haut"].append(pygame.image.load("images/Fantomes/Blinky/blinky-t-1.png").convert_alpha())
+        images["blinky"]["haut"].append(pygame.image.load("images/Fantomes/Blinky/blinky-t-2.png").convert_alpha())
 
         images["blinky"]["bas"] = []
-        images["blinky"]["bas"].append(pygame.image.load("images/blinky-b-1.png").convert_alpha())
-        images["blinky"]["bas"].append(pygame.image.load("images/blinky-b-2.png").convert_alpha())
+        images["blinky"]["bas"].append(pygame.image.load("images/Fantomes/Blinky/blinky-b-1.png").convert_alpha())
+        images["blinky"]["bas"].append(pygame.image.load("images/Fantomes/Blinky/blinky-b-2.png").convert_alpha())
 
         images["blinky"]["gauche"] = []
-        images["blinky"]["gauche"].append(pygame.image.load("images/blinky-l-1.png").convert_alpha())
-        images["blinky"]["gauche"].append(pygame.image.load("images/blinky-l-2.png").convert_alpha())
+        images["blinky"]["gauche"].append(pygame.image.load("images/Fantomes/Blinky/blinky-l-1.png").convert_alpha())
+        images["blinky"]["gauche"].append(pygame.image.load("images/Fantomes/Blinky/blinky-l-2.png").convert_alpha())
 
         images["blinky"]["droit"] = []
-        images["blinky"]["droit"].append(pygame.image.load("images/blinky-d-1.png").convert_alpha())
-        images["blinky"]["droit"].append(pygame.image.load("images/blinky-d-2.png").convert_alpha())
+        images["blinky"]["droit"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-1.png").convert_alpha())
+        images["blinky"]["droit"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-2.png").convert_alpha())
 
-        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 50, 50)
-        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 50, 50)
-        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 50, 50)
-        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 50, 50)
-        images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 50, 50)
+        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 30, 30)
+        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 30, 30)
+        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 30, 30)
+        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 30, 30)
+        images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
         return images
 
-def creerballe(touches):
-        if touches[K_SPACE]:
-                balle.append(BalleAnimee(images["luffy"]["debout"]))
+def creerballe(niveau,fenetre):
+        i = 0
+        for y in range(len(niveau.tab)):
+                for x in range(len(niveau.tab[y])):
+                        if niveau.tab[y][x] == 0:
+                                if (i%2) == 0:
+                                        balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
+                                i += 1
+        
 
 #def creerEnnemies(tour,x):
 #        if (tour%20) == 0:
-#                ennemies.append(BalleAnimee(images["balle"],0,-50))
+#                ennemies.append(BalleAnimee(images["balle"],0,-30))
 
 def supprimerElements(tab):
         newTab = []
@@ -117,35 +130,25 @@ def supprimerElements(tab):
                         newTab.append(e)
         return newTab
 
+def supprimerElements2D(tab):
+        tab = []
+        for y in range(len(tab)):
+                l = []
+                for x in range(len(tab[y])):
+                        if tab[y][x].isAlive():
+                                l.append(tab[y][x])
+                l.append(tab)
+        return tab
+
 
 pygame.init()
-x_fen = 1008
-y_fen = 792
+x_fen = 1184
+y_fen = 640
 fenetre = pygame.display.set_mode((x_fen,y_fen))
 #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
-nombre_tuile, taille_tuile, chemin_tuiles = chargerInfoTuiles(cheminInfo)
-tuiles = chargerImages(chemin_tuiles)
-#tuiles = resizeImg(tuiles, 5, 72, 72)
-matW = int(x_fen/taille_tuile) + 1
-matH = int(y_fen/taille_tuile) + 1
+images = lireImages()
 
-matrice = chargerMatrice(matW, matH, cheminNiveau)
-#print(matrice)
-
-score = 0
-red = (255, 0, 0)
-blue = (0, 0, 255)
-offsetColor = blue
-yellow = (255, 255, 0)
-white = (255, 255, 255)
-font = pygame.font.Font(None, 34)
-sText = 72
-offset = 2 #plus petit que possible pour de meilleur résultat
-menuFont = pygame.font.Font(None, sText)
-menuTxt = ["JOUER", "CLASSEMENT", "EDITEUR NIVEAU", "OPTIONS", "QUITTER"]
-
-images = lireImages();
 #Les tableaux des éléments
 balle = []
 ennemies = []
@@ -153,11 +156,15 @@ tire=[]
 tiles=[]
 ghost = None
 
+
+
 blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
-perso = JoueurAnimee(images["luffy"], 230, 100, matrice, taille_tuile)
-#fantome = Fantome(images["blinky"], 0, 0)
+perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
+niveau = Niveau("niveau/niveauTest.txt",images["mur"])
+niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
+creerballe(niveau,fenetre)
 
 game_over = False
 key_up = True
@@ -166,16 +173,7 @@ continuer = 1
 
 #Tour == variable de temps
 tour = 0
-
-for i in range(matW):
-        for j in range(matH):
-                if matrice[i][j] != '0':
-                        tiles.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
-                else:
-                        #print("ghost :", ghost)
-                        if not(ghost):
-                                ghost = Fantome(images["blinky"], i*taille_tuile+1,j*taille_tuile+1, matrice, taille_tuile)
-                        ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
+pos= []
 
 while continuer:
         tour += 1
@@ -183,112 +181,44 @@ while continuer:
         Fps = framerate.tick(35)
         #Affichage images
         fond.afficher(fenetre)
+        niveau.afficherLab(images["mur"],fenetre)
+        perso.afficher(fenetre)
         #Atribution des touches
         touches = pygame.key.get_pressed()
         #Attribution de la souris et de son click
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        #print(perso.collision)
-        #print("POSITION ACTUEL EN X: "+str(perso.rect.x))
-        #print("POSITION ACTUEL EN Y: "+str(perso.rect.y))
-        # # print("A ne pas depasser : "+str(perso.limite[3]))
-        #print(perso.limite)
+        perso.deplacer(niveau,touches, fenetre)
 
-        #304 376
-        if not touches[pygame.K_ESCAPE]:
-                key_up = True
-        if touches[pygame.K_ESCAPE] and pygame.time.get_ticks() - touch_wait > 300 and key_up:
-                key_up = False
-                continuer = 2 if continuer == 1 else 1
-                touch_wait = pygame.time.get_ticks()
+        print(niveau.tab[2][2])
+        
+        #Afficher et deplacer les éléments d'un tableaux 
+        for b in balle:
+                b.afficher(fenetre)
+                # b.Deplacer(x_fen, y_fen)
+                if b.collide(perso):
+                        print("ok")
 
+        for t in tiles:
+                t.afficher(fenetre)
 
-        if continuer == 1:
-                perso.deplacer(touches, fenetre)
+        for e in ennemies:
+                e.afficher(fenetre)
+                #e.Tombe(x_fen, y_fen)
+                if e.collide(perso):
+                        score += 1
 
-                creerballe(touches)
-                #creerEnnemies(tour, x_fen)
+        for t in tire:
+                t.afficher(fenetre)
+                t.Tire(x_fen, y_fen)
 
-                scoreTxt = "Score: {}".format(score)
-                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
-                perso.afficher(fenetre)
-
-                #print("ghost : ", ghost, ghost[0].rect)
-
-                ghost.afficher(fenetre)
-                ghost.deplacer(touches, fenetre)
-
-                if ghost.collide(perso):
-                        continuer = 2
-
-                #Afficher et deplacer les éléments d'un tableaux 
-                for b in balle:
-                        b.afficher(fenetre)
-                        b.Deplacer(x_fen, y_fen)
-
-                for t in tiles:
-                        t.afficher(fenetre)
-
-                for e in ennemies:
-                        e.afficher(fenetre)
-                        #e.Tombe(x_fen, y_fen)
-                        if e.collide(perso):
-                                score += 1
-
-                for t in tire:
-                        t.afficher(fenetre)
-                        t.Tire(x_fen, y_fen)
-
-                #Mort du perso
-                if perso.isAlive() == False:
-                        game_over = True
-
-                if not ennemies:
-                        for i in range(matW):
-                                for j in range(matH):
-                                        if matrice[i][j] == '0':
-                                                ennemies.append(Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1))
-
-        elif continuer > 1:
-                ElementGraphique(font.render(scoreTxt, True, yellow), (x_fen-(font.size(scoreTxt))[0]) / 2, 20).afficher(fenetre)
-                perso.afficher(fenetre)
-                for b in balle:
-                        b.afficher(fenetre)
-                #for f in ghost:
-                        #f.afficher(fenetre)
-
-                for e in ennemies:
-                        e.afficher(fenetre)
-
-                for t in tire:
-                        t.afficher(fenetre)
-                blur.afficher(fenetre)
-
-                if continuer == 2:
-                        s = len(menuTxt)
-                        for i in range(s):
-                                wTxt, hTxt = menuFont.size(menuTxt[i])
-                                xTxt = (x_fen - wTxt) / 2
-                                yTxt = y_fen/2 + (i-int(s/2))*(hTxt+sText/2)
-                                menutest = ElementGraphique(menuFont.render(menuTxt[i], True, offsetColor), xTxt+offset, yTxt+offset)
-                                menutest.afficher(fenetre)
-                                menutestombre = ElementGraphique(menuFont.render(menuTxt[i], True, white), xTxt, yTxt).afficher(fenetre)
-                                #si le text est en collision avec la position de la souris
-                                if menutest.rect.collidepoint(mouse):
-                                        offsetColor = red
-                                        menutest.afficher(fenetre)
-                                        if click[0] and i==0:
-                                                continuer=1
-                                        if click[0] and i==4:
-                                                continuer = 0
-
-                                #sinon on remet la couleur d'avant
-                                else:
-                                        offsetColor = blue
-                elif continuer == 3:
-                        ben_reste_code = True
+        #Mort du perso
+        if perso.isAlive() == False:
+                game_over = True
 
         ######################################
+        if perso.PixToCase(niveau) == 3:
+                print("push")
 
         ######################################
 
@@ -305,3 +235,17 @@ while continuer:
                         continuer = 0
 
 pygame.quit()
+
+
+        # print("HAUT")
+        # print(perso.PixToCase(niveau,0,24,0,-1))
+        # print(perso.PixToCase(niveau,14,24,0,-1))
+        # print("BAS")
+        # print(perso.PixToCase(niveau,0,0,0,1))
+        # print(perso.PixToCase(niveau,14,0,0,1))
+        # print("GAUCHE")
+        # print(perso.PixToCase(niveau,24,0,-1,0))
+        # print(perso.PixToCase(niveau,24,16,-1,0))
+        # print("DROITE")
+        # print(perso.PixToCase(niveau,-16,0,1,0))
+        # print(perso.PixToCase(niveau,-16,16,1,0))
