@@ -105,6 +105,14 @@ def lireImages():
         images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
         return images
 
+def chargerNiveau(i_niv, niveaux, y_fen, x_fen, img):
+    print(i_niv)
+    niveau = Niveau(niveaux[i_niv],img)
+    niveau.createLab(y_fen,x_fen,img[0].get_height(),img[0].get_width())
+    creerballe(niveau,fenetre, img[4])
+    creerEnnemies(niveau)
+    return niveau, i_niv
+
 def creerballe(niveau,fenetre, img):
         i = 0
         for y in range(len(niveau.tab)):
@@ -185,11 +193,9 @@ images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
 images["mur"] = resizeImg(images["mur"], 4, 30, 30)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
-niveau = Niveau("niveau/niveauTest.txt",images["mur"])
-niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
-creerballe(niveau,fenetre, images["mur"][4])
-creerEnnemies(niveau)
-
+i_niv = 0
+niveaux = ["niveau/niveauTest.txt", "niveau/niveauTest2.txt"]
+niveau, i_niv = chargerNiveau(i_niv, niveaux, x_fen, y_fen, images["mur"])
 
 game_over = False
 key_up = True
@@ -233,7 +239,8 @@ while continuer:
                 for t in trou:
                         t.afficher(fenetre)
                         if t.collide(perso):
-                                etat = "perdu"
+                                niveau, i_niv = chargerNiveau(i_niv+1, niveaux, x_fen, y_fen, images["mur"])
+                                trou = supprimerElements(trou)
 
                 for t in tiles:
                         t.afficher(fenetre)
