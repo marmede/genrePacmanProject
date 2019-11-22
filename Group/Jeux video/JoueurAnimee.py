@@ -18,7 +18,7 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.direction = "debout"
                 self.last_direction = "debout"
                 self.tire = []
-                self.vitesse = 6
+                self.vitesse = 7
                 self.collision = [False, False, False, False]
                 self.block = []
                 self.rect_bas = pygame.Rect((self.rect.x,self.rect.y + self.rect.h),(30,1))

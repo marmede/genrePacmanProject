@@ -21,15 +21,8 @@ def resizeImgTab(tab, largeur, hauteur):
         return newTab
 
 def resizeImg(tab, numImg, largeur, hauteur):
-        compt = 0
-        newTab =[]
-        for img in tab:
-                compt +=1
-                if compt == numImg:
-                        img = pygame.transform.scale(img, (largeur,hauteur))
-                newTab.append(img)
-
-        return newTab
+        tab[numImg] = pygame.transform.scale(tab[numImg], (largeur,hauteur))
+        return tab
 
 def lireImages():
         images = {}
@@ -37,6 +30,7 @@ def lireImages():
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
+        images["chomp"] = resizeImgTab(images["chomp"], 32, 32)
         images["luffy"] = {}
         images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
         images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
@@ -80,6 +74,7 @@ def lireImages():
         images["mur"].append(pygame.image.load("images/Mur/brique.png"))
         images["mur"].append(pygame.image.load("images/Mur/eau.png"))
         images["mur"].append(pygame.image.load("images/Mur/mur.png"))
+        images["mur"].append(pygame.image.load("images/black-hole.png").convert_alpha())
         #images["mur"].append(pygame.image.load("images/Mur/"))
 
 
@@ -110,7 +105,7 @@ def lireImages():
         images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
         return images
 
-def creerballe(niveau,fenetre):
+def creerballe(niveau,fenetre, img):
         i = 0
         for y in range(len(niveau.tab)):
                 for x in range(len(niveau.tab[y])):
@@ -118,6 +113,9 @@ def creerballe(niveau,fenetre):
                                 if (i%2) == 0:
                                         balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
                                 i += 1
+                        if niveau.tab[y][x] == 4:
+                                trou.append(ElementGraphique(img, (32*x), (32*y)))
+
         
 
 #def creerEnnemies(tour,x):
@@ -146,6 +144,19 @@ def Enregistrer(score,text):
         fichier.write(text+ " "+ str(score))
         fichier.close
 
+def recommencer(perso, score):
+        perso.rect.x = 2*32
+        perso.rect.y = 3*32
+        i = 0
+        for y in range(len(niveau.tab)):
+                for x in range(len(niveau.tab[y])):
+                        if niveau.tab[y][x] == 0:
+                                if (i%2) == 0:
+                                        balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
+                                i += 1
+        score = 0
+        return perso, score
+
 
 pygame.init()
 x_fen = 1184
@@ -157,6 +168,7 @@ images = lireImages()
 
 #Les tableaux des éléments
 balle = []
+trou = []
 ennemies = []
 tire=[]
 tiles=[]
@@ -171,7 +183,7 @@ fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
 niveau = Niveau("niveau/niveauTest.txt",images["mur"])
 niveau.createLab(y_fen,x_fen,images["mur"][0].get_height(),images["mur"][0].get_width())
-creerballe(niveau,fenetre)
+creerballe(niveau,fenetre, images["mur"][4])
 
 game_over = False
 key_up = True
@@ -206,11 +218,17 @@ while continuer:
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
-                score += 1
                 #Afficher et deplacer les éléments d'un tableaux 
                 for b in balle:
                         b.afficher(fenetre)
+                        if b.collide(perso):
+                                score += 1
                         # b.Deplacer(x_fen, y_fen)
+
+                for t in trou:
+                        t.afficher(fenetre)
+                        if t.collide(perso):
+                                etat = "perdu"
 
                 for t in tiles:
                         t.afficher(fenetre)
@@ -218,13 +236,14 @@ while continuer:
                 for e in ennemies:
                         e.afficher(fenetre)
                         #e.Tombe(x_fen, y_fen)
-                        if e.collide(perso):
-                                score += 1
 
                 for t in tire:
                         t.afficher(fenetre)
                         t.Tire(x_fen, y_fen)
 
+                scoreEcran = "Score: {}".format(score)
+                scoreMenu = ElementGraphique(font.render(scoreEcran, True, (255, 255, 0)), x_fen/2-70, 30)
+                scoreMenu.afficher(fenetre)
                 ######################################
                 if perso.PixToCase(niveau) == 3:
                         print("push")
@@ -233,8 +252,12 @@ while continuer:
                         etat = "perdu"
                         text = ''
         if etat == "perdu":
-                etat, text, continuer = menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
+                etat, text, continuer = menuGameOver(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
                 Enregistrer(score, text)
+
+        if etat == "recommencer":
+                perso, score = recommencer(perso, score)
+                etat = "jeu"
 
         ######################################
 
@@ -246,22 +269,8 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
-                # tire, images = perso.shoot(touches, event, tire, images)
+                tire, images = perso.shoot(touches, event, tire, images)
                 if event.type == pygame.QUIT:
                         continuer = 0
 
 pygame.quit()
-
-
-        # print("HAUT")
-        # print(perso.PixToCase(niveau,0,24,0,-1))
-        # print(perso.PixToCase(niveau,14,24,0,-1))
-        # print("BAS")
-        # print(perso.PixToCase(niveau,0,0,0,1))
-        # print(perso.PixToCase(niveau,14,0,0,1))
-        # print("GAUCHE")
-        # print(perso.PixToCase(niveau,24,0,-1,0))
-        # print(perso.PixToCase(niveau,24,16,-1,0))
-        # print("DROITE")
-        # print(perso.PixToCase(niveau,-16,0,1,0))
-        # print(perso.PixToCase(niveau,-16,16,1,0))
