@@ -25,6 +25,9 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.rect_droite = pygame.Rect((self.rect.x + self.rect.w + 3,self.rect.y),(1,30))
                 self.rect_gauche = pygame.Rect((self.rect.x - 3,self.rect.y),(1,30))
 
+        def position(self):
+            return self.rect.x, self.rect.y
+
         def PixToCase(self,niveau,dx=0,dy=0,x=0,y=0):
                 x_start = int((self.rect.x+dx)/32) + x
                 y_start = int((self.rect.y+dy)/32) + y
@@ -194,22 +197,23 @@ class JoueurAnimee(ElementGraphiqueAnimee):
         def Frame(self,tour,window,images):
                 if self.trigger == 3:
                         if tour < self.time:
-                                self.cheat = True
-                                if (tour%4 == 0):
-                                        self.direction = "hit"
-                                else:
-                                        self.direction = self.direction
+                            self.cheat = True
+                            if (tour%4 == 0):
+                                self.direction = "hit"
+                            else:
+                                self.direction = self.direction
                         else:
-                                self.trigger = 0
-                                self.cheat = False
-                                self.recevoirDegats()
+                            self.trigger = 0
+                            self.cheat = False
+                            self.recevoirDegats()
                 
         def setTime(self,tour,time,num):
                 self.time = tour + time
                 self.trigger = num
                 return self.time
 
-        def shoot(self, touches, event, tire, images):
-                if event.type == pygame.KEYUP and event.key == pygame.K_s:
-                        tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
-                return tire, images
+        def shoot(self, touches, tire, images):
+            if touches[pygame.K_w]:
+                print("tiree")
+                tire.append()
+            return tire, images

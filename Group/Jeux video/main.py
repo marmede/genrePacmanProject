@@ -94,15 +94,15 @@ def lireImages():
         images["blinky"]["gauche"].append(pygame.image.load("images/Fantomes/Blinky/blinky-l-1.png").convert_alpha())
         images["blinky"]["gauche"].append(pygame.image.load("images/Fantomes/Blinky/blinky-l-2.png").convert_alpha())
 
-        images["blinky"]["droit"] = []
-        images["blinky"]["droit"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-1.png").convert_alpha())
-        images["blinky"]["droit"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-2.png").convert_alpha())
+        images["blinky"]["droite"] = []
+        images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-1.png").convert_alpha())
+        images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-2.png").convert_alpha())
 
         images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 30, 30)
         images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 30, 30)
         images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 30, 30)
         images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 30, 30)
-        images["blinky"]["droit"] = resizeImgTab(images["blinky"]["droit"], 30, 30)
+        images["blinky"]["droite"] = resizeImgTab(images["blinky"]["droite"], 30, 30)
         return images
 
 def chargerNiveau(i_niv, niveaux, y_fen, x_fen, img):
@@ -229,6 +229,7 @@ while continuer:
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
+                tire, images = perso.shoot(touches, tire, images)
                 #Afficher et deplacer les éléments d'un tableaux 
                 for b in balle:
                         b.afficher(fenetre)
@@ -247,7 +248,8 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
-                        e.Tombe(x_fen, y_fen)
+                        if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
+                            perso.alive = False
 
                 for t in tire:
                         t.afficher(fenetre)
@@ -260,7 +262,7 @@ while continuer:
                 if perso.PixToCase(niveau) == 3:
                         print("push")
 
-                if perso.isAlive() == False or touches[pygame.K_ESCAPE]:
+                if not perso.isAlive() or touches[pygame.K_ESCAPE]:
                         etat = "perdu"
                         text = ''
         if etat == "perdu":
@@ -281,7 +283,6 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
-                tire, images = perso.shoot(touches, event, tire, images)
                 if event.type == pygame.QUIT:
                         continuer = 0
 

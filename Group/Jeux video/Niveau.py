@@ -1,5 +1,6 @@
 import pygame
 from ElementGraphiqueAnimee import ElementGraphiqueAnimee
+
 class Tuile(ElementGraphiqueAnimee):
     def __init__(self,img,x=0,y=0):
         ElementGraphiqueAnimee.__init__(self,[img],x,y)
@@ -111,8 +112,6 @@ class Niveau(ElementGraphiqueAnimee):
                     for y in range(lCase):
                         fichier.write('0')
                     fichier.write('\n')
-
-
 
 
     # def Update(self,y,x):

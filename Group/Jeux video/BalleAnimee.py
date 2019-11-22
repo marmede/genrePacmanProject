@@ -15,7 +15,6 @@ class BalleAnimee(ElementGraphiqueAnimee):
                 self.numimage = 0
 
 
-
         def VerifCollision(self,niveau):
                 
 	    # print("HAUT")
