@@ -17,6 +17,6 @@ def menuGameOver(score, font, x_fen, y_fen, touches, fenetre, text, etat, contin
 				continuer = 0
 			if event.type == KEYDOWN and event.key != K_RETURN:
 				text += event.unicode
-	fenetre.blit(font.render(text, True, (255, 255, 255)), (x_fen/2, y_fen/2))
+		fenetre.blit(font.render(text, True, (255, 255, 255)), (x_fen/2, y_fen/2))
 
 	return etat, text, continuer

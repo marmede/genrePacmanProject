@@ -98,11 +98,11 @@ def lireImages():
         images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-1.png").convert_alpha())
         images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-2.png").convert_alpha())
 
-        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 30, 30)
-        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 30, 30)
-        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 30, 30)
-        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 30, 30)
-        images["blinky"]["droite"] = resizeImgTab(images["blinky"]["droite"], 30, 30)
+        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 16, 16)
+        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 16, 16)
+        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 16, 16)
+        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 16, 16)
+        images["blinky"]["droite"] = resizeImgTab(images["blinky"]["droite"], 16, 16)
         return images
 
 def chargerNiveau(i_niv, niveaux, y_fen, x_fen, img):
@@ -156,18 +156,19 @@ def Enregistrer(score,text):
         fichier.write(text+ " "+ str(score))
         fichier.close
 
-def recommencer(perso, score):
+def recommencer(perso, score, niveau, ennemies):
         perso.rect.x = 2*32
         perso.rect.y = 3*32
         i = 0
         for y in range(len(niveau.tab)):
                 for x in range(len(niveau.tab[y])):
                         if niveau.tab[y][x] == 0:
-                                if (i%2) == 0:
+                                if (i%4) == 0:
                                         balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
                                 i += 1
         score = 0
-        return perso, score
+        creerEnnemies(niveau)
+        return perso, score, ennemies
 
 
 pygame.init()
@@ -229,7 +230,7 @@ while continuer:
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
-                tire, images = perso.shoot(touches, tire, images)
+                #tire, images = perso.shoot(touches, tire, images)
                 #Afficher et deplacer les éléments d'un tableaux 
                 for b in balle:
                         b.afficher(fenetre)
@@ -248,8 +249,10 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
-                        if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
-                            perso.alive = False
+                        e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y,)
+                        if perso.collide(e):
+                                etat = "perdu"
+                                test = ''
 
                 for t in tire:
                         t.afficher(fenetre)
@@ -262,7 +265,7 @@ while continuer:
                 if perso.PixToCase(niveau) == 3:
                         print("push")
 
-                if not perso.isAlive() or touches[pygame.K_ESCAPE]:
+                if touches[pygame.K_ESCAPE]:
                         etat = "perdu"
                         text = ''
         if etat == "perdu":
@@ -270,7 +273,8 @@ while continuer:
                 Enregistrer(score, text)
 
         if etat == "recommencer":
-                perso, score = recommencer(perso, score)
+                ennemies = []
+                perso, score, ennemies = recommencer(perso, score, niveau, ennemies)
                 etat = "jeu"
 
         ######################################
