@@ -50,7 +50,7 @@ class Fantome(JoueurAnimee):
 
         def VerifCollision(self,niveau):
                 # print("HAUT")
-                a = self.PixToCase(niveau,0,24,0,-1)
+                a = self.PixToCase(niveau,0,0,0,0)
                 b = self.PixToCase(niveau,14,24,0,-1) 
                 c = self.PixToCase(niveau,0,28,0,-1)
                 d = self.PixToCase(niveau,14,0,0,1)
@@ -149,4 +149,4 @@ class Fantome(JoueurAnimee):
                 else:
                         self.direction = self.last_direction
                 self.deltaX, self.deltaY = 0, 0
-                return self.joueurMort(joueurX, joueurY)
+                #return self.joueurMort(joueurX, joueurY)

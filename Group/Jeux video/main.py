@@ -30,7 +30,7 @@ def lireImages():
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
-        images["chomp"] = resizeImgTab(images["chomp"], 32, 32)
+        images["chomp"] = resizeImgTab(images["chomp"], 16, 16)
         images["luffy"] = {}
         images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
         images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
@@ -189,8 +189,8 @@ ghost = None
 
 font = pygame.font.Font(None, 34)
 
-blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
+blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["mur"] = resizeImg(images["mur"], 4, 30, 30)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
@@ -230,7 +230,6 @@ while continuer:
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
-                #tire, images = perso.shoot(touches, tire, images)
                 #Afficher et deplacer les éléments d'un tableaux 
                 for b in balle:
                         b.afficher(fenetre)
@@ -256,6 +255,8 @@ while continuer:
 
                 for t in tire:
                         t.afficher(fenetre)
+                        if t.collide(ennemies):
+                                ennemies.alive = False
                         t.Tire(x_fen, y_fen)
 
                 scoreEcran = "Score: {}".format(score)
@@ -287,6 +288,7 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
+                tire, images, score = perso.shoot(touches, event, tire, images, score)
                 if event.type == pygame.QUIT:
                         continuer = 0
 

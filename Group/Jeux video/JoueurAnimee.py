@@ -212,8 +212,9 @@ class JoueurAnimee(ElementGraphiqueAnimee):
                 self.trigger = num
                 return self.time
 
-        def shoot(self, touches, tire, images):
-            if touches[pygame.K_w]:
-                print("tiree")
-                tire.append()
-            return tire, images
+        def shoot(self, touches, event, tire, images, score):
+                if event.type == pygame.KEYUP and event.key == pygame.K_s:
+                    if score >= 1:
+                        tire.append(BalleTiree(images["chomp"],self.setTire(self.Tire()),self.rect.x,self.rect.y))
+                        score -= 1
+                return tire, images, score
