@@ -10,7 +10,6 @@ from BonusAnimee import BonusAnimee
 from BalleTiree import BalleTiree
 from Niveau import *
 from Fantome import Fantome
-from GameOver import *
 from Menu import *
 
 def resizeImgTab(tab, largeur, hauteur):
@@ -178,16 +177,16 @@ def lireScore():
     data.sort()
     return data
 
-<<<<<<< HEAD
 def sauverScore(score): 
     fichier = open("niveau/score.txt","a") 
-    fichier.write(str(score)+'\n') 
+    fichier.seek(0)
+    fichier.write(str(score)+'\n')
+    fichier.truncate()
     fichier.close() 
-=======
+
 def changerSon(n):
         pygame.mixer.stop()
         n.play()
->>>>>>> master
 
 pygame.init()
 x_fen = 1184
@@ -286,13 +285,13 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
-<<<<<<< HEAD
+
                         if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
                             perso.alive = False
 
                 for t in tire:
                         t.afficher(fenetre)
-=======
+
                         e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y,)
                         if perso.collide(e):
                                 etat = "perdu"
@@ -305,7 +304,7 @@ while continuer:
                         for e in ennemies:
                             if t.collide(e):
                                 e.alive = False
->>>>>>> master
+
                         t.Tire(x_fen, y_fen)
 
 
@@ -319,20 +318,12 @@ while continuer:
                 if not perso.isAlive() or touches[pygame.K_ESCAPE]:
                         etat = "perdu"
                         text = ''
-<<<<<<< HEAD
-        elif etat == "perdu":
-                etat, text, continuer = menuGameOver(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
-                Enregistrer(score, text)
 
-        elif etat == "recommencer":
-                perso, score = recommencer(perso, score)
-                etat = "jeu"
         elif etat == "menu" or etat == "classement": 
             etat, dicoMenu = menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dicoMenu) 
         elif etat == "editeur": 
             exec(open("Editeur.py").read()) 
-=======
-                        changementSon = True
+
         if etat == "win":
                 if changementSon:
                         changerSon(sonMenu)
@@ -351,7 +342,6 @@ while continuer:
                 perso, score, ennemies = recommencer(perso, score, niveau, ennemies)
                 etat = "jeu"
                 changementSon = True
->>>>>>> master
 
         ######################################
 
