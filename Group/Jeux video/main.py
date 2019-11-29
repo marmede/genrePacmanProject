@@ -313,9 +313,12 @@ while continuer:
                         print("push")
 
                 if touches[pygame.K_ESCAPE]:
-                        etat = "perdu"
+                        etat = "pause"
                         text = ''
                         changementSon = True
+
+        if etat == "pause":
+                etat = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt)
         if etat == "win":
                 if changementSon:
                         changerSon(sonMenu)
