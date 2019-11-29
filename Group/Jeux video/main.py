@@ -170,6 +170,9 @@ def recommencer(perso, score, niveau, ennemies):
         creerEnnemies(niveau)
         return perso, score, ennemies
 
+def changerSon(n):
+        pygame.mixer.stop()
+        n.play()
 
 pygame.init()
 x_fen = 1184
@@ -203,6 +206,9 @@ key_up = True
 touch_wait = pygame.time.get_ticks()
 continuer = 1
 
+sonMenu = pygame.mixer.Sound("musiques/awesomeness.wav")
+sonNiveau1 = pygame.mixer.Sound("musiques/awake10.ogg")
+
 #Tour == variable de temps
 tour = 0
 pos= []
@@ -212,6 +218,7 @@ etat = "jeu"
 
 text = ''
 
+changementSon = True
 
 while continuer:
         tour += 1
@@ -227,6 +234,9 @@ while continuer:
 
         
         if etat == "jeu":
+                if changementSon:
+                        changerSon(sonNiveau1)
+                        changementSon = False
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
@@ -252,12 +262,15 @@ while continuer:
                         if perso.collide(e):
                                 etat = "perdu"
                                 test = ''
+                                changementSon = True
 
                 for t in tire:
                         t.afficher(fenetre)
-                        # if t.collide(ennemies):
-                        #         ennemies.alive = False
+                        for e in ennemies:
+                            if t.collide(e):
+                                e.alive = False
                         t.Tire(x_fen, y_fen)
+
 
                 scoreEcran = "Score: {}".format(score)
                 scoreMenu = ElementGraphique(font.render(scoreEcran, True, (255, 255, 0)), x_fen/2-70, 30)
@@ -269,14 +282,25 @@ while continuer:
                 if touches[pygame.K_ESCAPE]:
                         etat = "perdu"
                         text = ''
-        if etat == "perdu":
-                etat, text, continuer = menuGameOver(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
+                        changementSon = True
+        if etat == "win":
+                if changementSon:
+                        changerSon(sonMenu)
+                        changementSon = False
+                etat, text, continuer = menuWin(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
                 Enregistrer(score, text)
+
+        if etat == "perdu":
+                if changementSon:
+                        changerSon(sonMenu)
+                        changementSon = False
+                score, etat, continuer = menuGameOver(score, font, touches, fenetre, etat, continuer)
 
         if etat == "recommencer":
                 ennemies = []
                 perso, score, ennemies = recommencer(perso, score, niveau, ennemies)
                 etat = "jeu"
+                changementSon = True
 
         ######################################
 
