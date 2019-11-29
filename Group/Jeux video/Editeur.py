@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 cheminInfo = "niveau/level0_info.txt"
-nomNiveau = "niveau/niveauTest.txt"
+nomNiveau = "niveau/niveauTest3.txt"
 
 class Tuile():
 	"""Classe représentant une tuile, on ne définit qu'une méthode
@@ -76,9 +76,9 @@ def chargerMatrice(matW, matH, path):
 def enregistrer(data, matW, matH, path):
 	text = ""
 	file = open(path, "w")
-	for j in range(matH):
-		for i in range(matW):
-			text += matrice[i][j]
+	for i in range(matH):
+		for j in range(matW):
+			text += str(matrice[i][j])
 		text += '\n'
 	file.write(text)
 	file.close()
@@ -164,20 +164,25 @@ while continuer:
 		color = 'b'
 
 	for event in pygame.event.get():
-		if event.type == pygame.QUIT or touches[pygame.K_ESCAPE]:
+		if event.type == pygame.QUIT:
+			continuer = 0
+		if touches[pygame.K_ESCAPE]:
 			enregistrer(matrice, matW, matH, nomNiveau)
 			exec(open("main.py").read())
+			quit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			x, y = pygame.mouse.get_pos()
 			if event.button == 1 and selection != -1:
-				matrice = ajouterTuile(matrice, x, y, matW, matH, taille_tuile, selection)
+				matrice = ajouterTuile(matrice, x, y, matW, matH, taille_tuile, selection-1)
 			if event.button == 3:
 				clearScreen(window, color)
 				matrice = ajouterTuile(matrice, x, y, matW, matH, taille_tuile, 0)
 
-	for i in range(matW):
-		for j in range(matH):
+	for i in range(matH):
+		for j in range(matW):
 			if matrice[i][j] != 0 and selection <= taille_tuile:
 				Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1).afficher(window)
 
 	pygame.display.flip()
+
+pygame.quit()

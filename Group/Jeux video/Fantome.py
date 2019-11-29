@@ -12,11 +12,11 @@ class Fantome(JoueurAnimee):
                 self.rect.y = y
                 self.vitesse = 2
 
-        def Cooldown(self, niveau):
-                tabrect = [self.rect_haut,self.rect_bas,self.rect_droite,self.rect_gauche]
-                for rect in range(len(tabrect)):
-                        if self.PixToCase(niveau) == 2:
-                                self.alive = False
+        # def Cooldown(self, niveau):
+        #         tabrect = [self.rect_haut,self.rect_bas,self.rect_droite,self.rect_gauche]
+        #         for rect in range(len(tabrect)):
+        #                 if self.PixToCase(niveau) == 2:
+        #                         self.alive = False
 
         def pathfinding(self, x, y):
                 #à modifier avec du pathfinding
@@ -66,7 +66,7 @@ class Fantome(JoueurAnimee):
 
         def deplacer(self, niveau, fenetre, joueurX, joueurY):
                 self.VerifCollision(niveau)
-                self.Cooldown(niveau)
+                # self.Cooldown(niveau)
                 self.deltaX, self.deltaY = self.pathfinding(joueurX, joueurY)
 
                 self.rect_bas.x = self.rect.x
