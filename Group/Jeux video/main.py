@@ -178,10 +178,16 @@ def lireScore():
     data.sort()
     return data
 
+<<<<<<< HEAD
 def sauverScore(score): 
     fichier = open("niveau/score.txt","a") 
     fichier.write(str(score)+'\n') 
     fichier.close() 
+=======
+def changerSon(n):
+        pygame.mixer.stop()
+        n.play()
+>>>>>>> master
 
 pygame.init()
 x_fen = 1184
@@ -222,6 +228,9 @@ key_up = True
 touch_wait = pygame.time.get_ticks()
 continuer = 1
 
+sonMenu = pygame.mixer.Sound("musiques/awesomeness.wav")
+sonNiveau1 = pygame.mixer.Sound("musiques/awake10.ogg")
+
 #Tour == variable de temps
 tour = 0
 pos= []
@@ -231,6 +240,7 @@ etat = "jeu"
 
 text = ''
 
+changementSon = True
 
 while continuer:
         tour += 1
@@ -252,6 +262,9 @@ while continuer:
             touch_wait = pygame.time.get_ticks()
         
         if etat == "jeu":
+                if changementSon:
+                        changerSon(sonNiveau1)
+                        changementSon = False
                 niveau.afficherLab(images["mur"],fenetre)
                 perso.afficher(fenetre)
                 perso.deplacer(niveau,touches, fenetre)
@@ -273,12 +286,28 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
+<<<<<<< HEAD
                         if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
                             perso.alive = False
 
                 for t in tire:
                         t.afficher(fenetre)
+=======
+                        e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y,)
+                        if perso.collide(e):
+                                etat = "perdu"
+                                test = ''
+                                changementSon = True
+
+                for t in tire:
+                        t.afficher(fenetre)
+                        t.Colli(niveau)
+                        for e in ennemies:
+                            if t.collide(e):
+                                e.alive = False
+>>>>>>> master
                         t.Tire(x_fen, y_fen)
+
 
                 scoreEcran = "Score: {}".format(score)
                 scoreMenu = ElementGraphique(font.render(scoreEcran, True, (255, 255, 0)), x_fen/2-70, 30)
@@ -290,6 +319,7 @@ while continuer:
                 if not perso.isAlive() or touches[pygame.K_ESCAPE]:
                         etat = "perdu"
                         text = ''
+<<<<<<< HEAD
         elif etat == "perdu":
                 etat, text, continuer = menuGameOver(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
                 Enregistrer(score, text)
@@ -301,6 +331,27 @@ while continuer:
             etat, dicoMenu = menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dicoMenu) 
         elif etat == "editeur": 
             exec(open("Editeur.py").read()) 
+=======
+                        changementSon = True
+        if etat == "win":
+                if changementSon:
+                        changerSon(sonMenu)
+                        changementSon = False
+                etat, text, continuer = menuWin(scoreMenu, font, x_fen, y_fen, touches, fenetre, text, etat, continuer)
+                Enregistrer(score, text)
+
+        if etat == "perdu":
+                if changementSon:
+                        changerSon(sonMenu)
+                        changementSon = False
+                score, etat, continuer = menuGameOver(score, font, touches, fenetre, etat, continuer)
+
+        if etat == "recommencer":
+                ennemies = []
+                perso, score, ennemies = recommencer(perso, score, niveau, ennemies)
+                etat = "jeu"
+                changementSon = True
+>>>>>>> master
 
         ######################################
 

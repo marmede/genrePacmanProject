@@ -27,3 +27,12 @@ class BalleTiree(BalleAnimee):
                 self.rect.y += self.delta[1]
                 if self.rect.y <= -100 or self.rect.y >= y+50 :
                         self.alive = False
+
+        def PixToCase(self,niveau):
+                x_start = int((self.rect.x)/32) 
+                y_start = int((self.rect.y)/32) 
+                return niveau.tab[y_start][x_start]
+
+        def Colli(self,niveau):
+                if self.PixToCase(niveau) == 1:
+                        self.alive = False
