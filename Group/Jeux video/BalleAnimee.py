@@ -4,49 +4,49 @@ from ElementGraphiqueAnimee import ElementGraphiqueAnimee
 from random import randint
 
 class BalleAnimee(ElementGraphiqueAnimee):
-        def __init__(self,img,x,y):
+        def __init__(self,img,x=0,y=0):
                 ElementGraphiqueAnimee.__init__(self,img,x,y)
                 self.deltaX = randint(-10,10)
                 self.deltaY = randint(-10,10)
                 self.rect.x = x
                 self.rect.y = y
-                self.collision = [False,False,False,False]
                 self.image = img
                 self.numimage = 0
 
 
-        def VerifCollision(self,niveau):
+
+     #    def VerifCollision(self,niveau):
                 
-	    # print("HAUT")
-                if (self.PixToCase(niveau,0,24,0,-1) == 1) or (self.PixToCase(niveau,14,24,0,-1) == 1):
-                        self.collision[0] = True
-                else:
-                        self.collision[0] = False
+	    # # print("HAUT")
+     #            if (self.PixToCase(niveau,0,24,0,-1) == 1) or (self.PixToCase(niveau,14,24,0,-1) == 1):
+     #                    self.collision[0] = True
+     #            else:
+     #                    self.collision[0] = False
 
-	    # print("BAS")
-                if (self.PixToCase(niveau,0,28,0,-1) == 1) or (self.PixToCase(niveau,14,0,0,1) == 1):
-                        self.collision[1] = True
-                else:
-                        self.collision[1] = False
+	    # # print("BAS")
+     #            if (self.PixToCase(niveau,0,28,0,-1) == 1) or (self.PixToCase(niveau,14,0,0,1) == 1):
+     #                    self.collision[1] = True
+     #            else:
+     #                    self.collision[1] = False
 
-	    # print("GAUCHE")
-                if (self.PixToCase(niveau,24,0,-1,0) == 1) or (self.PixToCase(niveau,24,16,-1,0) == 1):
-                        self.collision[3] = True
-                else:
-                        self.collision[3] = False
+	    # # print("GAUCHE")
+     #            if (self.PixToCase(niveau,24,0,-1,0) == 1) or (self.PixToCase(niveau,24,16,-1,0) == 1):
+     #                    self.collision[3] = True
+     #            else:
+     #                    self.collision[3] = False
 
-	    # print("DROITE")
-                # if (self.PixToCase(niveau,-12,0,1,0) == 1) or (self.PixToCase(niveau,-12,16,1,0) == 1):
-                #         self.collision[2] = True
-                # else:
-                #         self.collision[2] = False
+	    # # print("DROITE")
+     #            # if (self.PixToCase(niveau,-12,0,1,0) == 1) or (self.PixToCase(niveau,-12,16,1,0) == 1):
+     #            #         self.collision[2] = True
+     #            # else:
+     #            #         self.collision[2] = False
 
-        def PixToCase(self,niveau,dx=0,dy=0,x=0,y=0):
-                x_start = int((self.rect.x+dx)/32) + x
-                y_start = int((self.rect.y+dy)/32) + y
-                print(x_start)
-                print(y_start) 
-                return niveau.tab[y_start][x_start]
+     #    def PixToCase(self,niveau,dx=0,dy=0,x=0,y=0):
+     #            x_start = int((self.rect.x+dx)/32) + x
+     #            y_start = int((self.rect.y+dy)/32) + y
+     #            print(x_start)
+     #            print(y_start) 
+     #            return niveau.tab[y_start][x_start]
 
         def x(self):
                 x_start = int((self.rect.x)/32)
@@ -97,8 +97,8 @@ class BalleAnimee(ElementGraphiqueAnimee):
                 if self.rect.y >= (y+50) :
                         self.alive = False
 
-        def afficher(self, window) :
-                if (self.fps % 1 )== 0:
-                        self.numimage = (self.numimage)%len(self.image[self.direction])
-                        window.blit(self.image[self.direction][self.numimage],self.rect,)
+        # def afficher(self, window) :
+        #         if (self.fps % 1 )== 0:
+        #                 self.numimage = (self.numimage)%len(self.image[self.direction])
+        #                 window.blit(self.image[self.direction][self.numimage],self.rect,)
 
