@@ -1,7 +1,7 @@
 NB_TUILE: 5
-TAILLE_TUILE: 72
-TUILE_1: images/mur.png
-TUILE_2: images/brique.png
-TUILE_3: images/bois.png
-TUILE_4: images/eau.png
-TUILE_5: images/balle.png
+TAILLE_TUILE: 32
+TUILE_1: images/Mur/mur.png
+TUILE_2: images/Mur/brique.png
+TUILE_3: images/Mur/bois.png
+TUILE_4: images/Mur/eau.png
+TUILE_5: images/Mur/blackhole.png

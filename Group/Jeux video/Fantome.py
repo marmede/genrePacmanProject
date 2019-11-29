@@ -31,23 +31,6 @@ class Fantome(JoueurAnimee):
                         dY = 1
                 return dX, dY
 
-        def joueurMort(self, x, y):
-                gau, gauJoueur = self.rect.x, x
-                dro, droJoueur = self.rect.x + self.rect.w, x + self.rect.w
-                hau, hauJoueur = self.rect.y, y
-                bas, basJoueur = self.rect.y + self.rect.h, y + self.rect.h
-
-                if bas < hauJoueur:
-                        return False
-                if hau > basJoueur:
-                        return False
-                if dro < gauJoueur:
-                        return False
-                if gau > droJoueur:
-                        return False
-
-                return True
-
         def VerifCollision(self,niveau):
                 # print("HAUT")
                 a = self.PixToCase(niveau,0,0,0,0)

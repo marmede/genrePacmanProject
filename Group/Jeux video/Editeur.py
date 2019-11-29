@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 cheminInfo = "niveau/level0_info.txt"
-nomNiveau = "niveau/level0.bin"
+nomNiveau = "niveau/niveauTest.txt"
 
 class Tuile():
 	"""Classe représentant une tuile, on ne définit qu'une méthode
@@ -64,26 +64,13 @@ def chargerImages(paths):
 
 def chargerMatrice(matW, matH, path):
 	matrice = []
-	for i in range(matW):
-		temp = []
-		for j in range(matH):
-			temp.append("0")
-		matrice.append(temp)
-	if path != "":
-		file = open(path, "r")
-		data = file.read()
-		file.close()
-		i, j, c = 0, 0, 0
-		while(c < len(data) and j < matH):
-			print(data[c], len(data), c, matW, i, matH, j)
-			if data[c] != ' ':
-				if i == matW:
-					j += 1
-					i = -1
-				if data[c] != '0' and data[c] != '\n':
-					matrice[i][j] = data[c]
-				i += 1
-			c += 1
+	fichier = open(path, "r")
+	for ligne in fichier:
+		l = []
+		for i in ligne:
+			if i != '\n':
+				l.append(int(i))
+		matrice.append(l)
 	return matrice
 
 def enregistrer(data, matW, matH, path):
@@ -92,9 +79,7 @@ def enregistrer(data, matW, matH, path):
 	for j in range(matH):
 		for i in range(matW):
 			text += matrice[i][j]
-			text += ' '
 		text += '\n'
-	print(text)
 	file.write(text)
 	file.close()
 
@@ -192,7 +177,7 @@ while continuer:
 
 	for i in range(matW):
 		for j in range(matH):
-			if matrice[i][j] != '0' and selection <= taille_tuile:
+			if matrice[i][j] != 0 and selection <= taille_tuile:
 				Tuile(tuiles[int(matrice[i][j])-1], i*taille_tuile+1, j*taille_tuile+1).afficher(window)
 
 	pygame.display.flip()

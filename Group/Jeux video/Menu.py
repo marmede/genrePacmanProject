@@ -34,7 +34,7 @@ def menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt):
 			offsetColor = blue
 	return ""
 
-def menuJeu(fenetre, etat, attendre, blur, x_fen, y_fen, sTxt, menuFont, dico):
+def menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dico):
 	if etat == "menu":
 		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["menu"])
 		if retour == dico["menu"][0]:
@@ -44,30 +44,9 @@ def menuJeu(fenetre, etat, attendre, blur, x_fen, y_fen, sTxt, menuFont, dico):
 		elif retour == dico["menu"][2]:
 			etat = "editeur"
 		elif retour == dico["menu"][3]:
-			etat = "options"
-		elif retour == dico["menu"][4]:
 			etat = "quitter"
-	elif etat == "options":
-		attendre = pygame.time.get_ticks()
-		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["options"])
-		if retour == "FRANÇAIS":
-			dico["options"][3] = "RETOUR"
-			dico["menu"] = dico["fr"]
-			etat = "menu"
-		elif retour == "ESPAÑOL":
-			dico["options"][3] = "VOLVER" 
-			dico["menu"] = dico["es"]
-			etat = "menu"
-		elif retour == "ENGLISH":
-			dico["options"][3] = "BACK"
-			dico["menu"] = dico["en"]
-		elif retour == dico["options"][3] and pygame.time.get_ticks() - attendre > 300:
-			etat = "menu"
-			attendre = pygame.time.get_ticks()
 	elif etat == "classement":
-		attendre = pygame.time.get_ticks()
 		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["classement"])
-		if retour == "RETOUR" and pygame.time.get_ticks() - attendre > 300:
+		if retour == "RETOUR":
 			etat = "menu"
-			attendre = pygame.time.get_ticks()
-	return etat, dico, attendre
+	return etat, dico
