@@ -76,8 +76,11 @@ def menuGameOver(score, font, touches, fenetre, etat, continuer):
 		etat = "recommencer"
 	else:
 		perdu = "Ta perdu c:"
-		perduImg = ElementGraphique(font.render(perdu, True, (255,255,255)), largeur/2-105, hauteur/2)
+		bouton = "<Entrer> pour recommencer"
+		perduImg = ElementGraphique(font.render(perdu, True, (255,255,255)), largeur/2-100, hauteur/2-50)
+		boutonImg = ElementGraphique(font.render(bouton, True, (255,255,255)), largeur/2-180, hauteur/2)
 		perduImg.afficher(fenetre)
+		boutonImg.afficher(fenetre)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				continuer = 0
