@@ -255,8 +255,8 @@ while continuer:
 
                 for t in tire:
                         t.afficher(fenetre)
-                        if t.collide(ennemies):
-                                ennemies.alive = False
+                        # if t.collide(ennemies):
+                        #         ennemies.alive = False
                         t.Tire(x_fen, y_fen)
 
                 scoreEcran = "Score: {}".format(score)
