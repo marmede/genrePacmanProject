@@ -172,16 +172,12 @@ def recommencer(perso, score):
 def lireScore(): 
     fichier = open("niveau/score.txt","r") 
     data = fichier.read() 
- 
-    data = data.split("\n") 
-    data.sort()
-    return data
+    fichier.close()
+    return data[:len(data)-1]
 
 def sauverScore(score): 
-    fichier = open("niveau/score.txt","a") 
-    fichier.seek(0)
+    fichier = open("niveau/score.txt","w")
     fichier.write(str(score)+'\n')
-    fichier.truncate()
     fichier.close() 
 
 def changerSon(n):
@@ -208,7 +204,7 @@ sTxt = 72
 font = pygame.font.Font(None, 34)
 menuFont = pygame.font.Font(None, sTxt) 
 menuTxt = ["JOUER", "MEILLEUR SCORE", "EDITEUR NIVEAU", "QUITTER"]
-topScore = lireScore() 
+topScore = [lireScore()]
 topScore.append("RETOUR")
 
 dicoMenu = {"menu": menuTxt, "classement": topScore}
@@ -285,13 +281,13 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
-
+                        if e.collide(perso):
+                            perso.alive = False
                         if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
                             perso.alive = False
 
                 for t in tire:
                         t.afficher(fenetre)
-
                         e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y,)
                         if perso.collide(e):
                                 etat = "perdu"
@@ -315,7 +311,7 @@ while continuer:
                 if perso.PixToCase(niveau) == 3:
                         print("push")
 
-                if not perso.isAlive() or touches[pygame.K_ESCAPE]:
+                if not perso.isAlive():
                         etat = "perdu"
                         text = ''
 
@@ -356,7 +352,7 @@ while continuer:
             tire, images, score = perso.shoot(touches, event, tire, images, score)
             if event.type == pygame.QUIT or etat == "quitter":
                     continuer = 0
-        if continuer == 0:
+        if continuer == 0 and score > int(topScore[0]):
             sauverScore(score)
 
 pygame.quit()

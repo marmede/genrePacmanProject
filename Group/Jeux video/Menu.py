@@ -48,7 +48,10 @@ def menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dico):
 	elif etat == "classement":
 		retour = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, dico["classement"])
 		if retour == "RETOUR":
+			touch_wait = pygame.time.get_ticks()
 			etat = "menu"
+			while(pygame.time.get_ticks() - touch_wait < 200):
+				continue
 	return etat, dico
 
 def menuWin(score, font, x_fen, y_fen, touches, fenetre, text, etat, continuer):
@@ -75,7 +78,7 @@ def menuGameOver(score, font, touches, fenetre, etat, continuer):
 	if touches[pygame.K_RETURN]:
 		etat = "recommencer"
 	else:
-		perdu = "Ta perdu c:"
+		perdu = "Tu as perdu: "
 		perduImg = ElementGraphique(font.render(perdu, True, (255,255,255)), largeur/2-105, hauteur/2)
 		perduImg.afficher(fenetre)
 		for event in pygame.event.get():
