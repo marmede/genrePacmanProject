@@ -350,10 +350,12 @@ while continuer:
                 if not perso.isAlive():
 =======
                 if touches[pygame.K_ESCAPE]:
->>>>>>> master
-                        etat = "perdu"
+                        etat = "pause"
                         text = ''
                         changementSon = True
+
+        if etat == "pause":
+                etat = menuPositionJeu(fenetre, blur, x_fen, y_fen, sTxt, menuFont, menuTxt)
         if etat == "win":
                 if changementSon:
                         changerSon(sonMenu)
