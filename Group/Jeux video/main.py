@@ -266,6 +266,7 @@ while continuer:
 
                 for t in tire:
                         t.afficher(fenetre)
+                        t.Colli(niveau)
                         for e in ennemies:
                             if t.collide(e):
                                 e.alive = False
