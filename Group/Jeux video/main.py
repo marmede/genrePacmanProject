@@ -30,7 +30,7 @@ def lireImages():
         images["balle"] = [pygame.image.load("images/balle.png").convert_alpha()]
         images["background"] = [pygame.image.load("images/background2.jpg").convert()]
         images["chomp"] = [pygame.image.load("images/Balle/chomp1.png").convert_alpha()]
-        images["chomp"] = resizeImgTab(images["chomp"], 32, 32)
+        images["chomp"] = resizeImgTab(images["chomp"], 16, 16)
         images["luffy"] = {}
         images["luffy"]["debout"] = [pygame.image.load("images/Luffy/row-1-col-1.png").convert_alpha()]
         images["luffy"]["hit"] = [pygame.image.load("images/Luffy/hit.png").convert_alpha()]
@@ -98,11 +98,11 @@ def lireImages():
         images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-1.png").convert_alpha())
         images["blinky"]["droite"].append(pygame.image.load("images/Fantomes/Blinky/blinky-d-2.png").convert_alpha())
 
-        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 30, 30)
-        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 30, 30)
-        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 30, 30)
-        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 30, 30)
-        images["blinky"]["droite"] = resizeImgTab(images["blinky"]["droite"], 30, 30)
+        images["blinky"]["debout"] = resizeImgTab(images["blinky"]["debout"], 16, 16)
+        images["blinky"]["haut"] = resizeImgTab(images["blinky"]["haut"], 16, 16)
+        images["blinky"]["bas"] = resizeImgTab(images["blinky"]["bas"], 16, 16)
+        images["blinky"]["gauche"] = resizeImgTab(images["blinky"]["gauche"], 16, 16)
+        images["blinky"]["droite"] = resizeImgTab(images["blinky"]["droite"], 16, 16)
         return images
 
 def chargerNiveau(i_niv, niveaux, y_fen, x_fen, img):
@@ -152,21 +152,32 @@ def supprimerElements2D(tab):
         return tab
 
 def Enregistrer(score,text):
-        fichier = open("score.txt","w")
-        fichier.write(text+ " "+ str(score))
-        fichier.close
+        fichier = open("niveau/score.txt","a")  
+        fichier.seek(0)
+        fichier.write(text+" "+str(score)+'\n') 
+        fichier.truncate() 
+        fichier.close()
 
-def recommencer(perso, score):
+def lireScore():  
+    fichier = open("niveau/score.txt","r")  
+    data = fichier.read()  
+  
+    data = data.split("\n")  
+    data.sort() 
+    return data
+
+def recommencer(perso, score, niveau, ennemies):
         perso.rect.x = 2*32
         perso.rect.y = 3*32
         i = 0
         for y in range(len(niveau.tab)):
                 for x in range(len(niveau.tab[y])):
                         if niveau.tab[y][x] == 0:
-                                if (i%2) == 0:
+                                if (i%4) == 0:
                                         balle.append(ElementGraphique(images["balle"][0],(32 * x)+8,(32 * y)+8))
                                 i += 1
         score = 0
+<<<<<<< HEAD
         return perso, score
 
 def lireScore(): 
@@ -179,6 +190,15 @@ def sauverScore(score):
     fichier = open("niveau/score.txt","w")
     fichier.write(str(score)+'\n')
     fichier.close() 
+=======
+        creerEnnemies(niveau)
+        return perso, score, ennemies
+
+def fauxBalles(tab):
+        for e in tab:
+                e.alive = False
+        return tab
+>>>>>>> master
 
 def changerSon(n):
         pygame.mixer.stop()
@@ -191,6 +211,14 @@ fenetre = pygame.display.set_mode((x_fen,y_fen))
 #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
 images = lireImages()
+sTxt = 72
+
+menuFont = pygame.font.Font(None, sTxt)  
+menuTxt = ["JOUER", "MEILLEUR SCORE", "EDITEUR NIVEAU", "QUITTER"] 
+topScore = lireScore()  
+topScore.append("RETOUR") 
+ 
+dicoMenu = {"menu": menuTxt, "classement": topScore} 
 
 #Les tableaux des éléments
 balle = []
@@ -200,17 +228,19 @@ tire=[]
 tiles=[]
 ghost = None
 
-sTxt = 72
 font = pygame.font.Font(None, 34)
+<<<<<<< HEAD
 menuFont = pygame.font.Font(None, sTxt) 
 menuTxt = ["JOUER", "MEILLEUR SCORE", "EDITEUR NIVEAU", "QUITTER"]
 topScore = [lireScore()]
 topScore.append("RETOUR")
 
 dicoMenu = {"menu": menuTxt, "classement": topScore}
+=======
+>>>>>>> master
 
-blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["blur"] = resizeImgTab(images["blur"], x_fen, y_fen)
+blur = ElementGraphiqueAnimee(images["blur"], 0, 0)
 images["mur"] = resizeImg(images["mur"], 4, 30, 30)
 fond = ElementGraphiqueAnimee(images["background"],0,0)
 perso = JoueurAnimee(images["luffy"], 32*2, 32*3)
@@ -231,7 +261,7 @@ tour = 0
 pos= []
 score = 0
 
-etat = "jeu"
+etat = "menu"
 
 text = ''
 
@@ -249,13 +279,9 @@ while continuer:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
-        if not touches[pygame.K_ESCAPE]:
-            key_up = True
-        if touches[pygame.K_ESCAPE] and pygame.time.get_ticks() - touch_wait > 300 and key_up:
-            key_up = False
-            etat = "jeu" if etat == "menu" else "menu"
-            touch_wait = pygame.time.get_ticks()
-        
+        if etat == "menu":
+                etat, dicoMenu = menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dicoMenu)
+
         if etat == "jeu":
                 if changementSon:
                         changerSon(sonNiveau1)
@@ -273,7 +299,14 @@ while continuer:
                 for t in trou:
                         t.afficher(fenetre)
                         if t.collide(perso):
-                                niveau, i_niv = chargerNiveau(i_niv+1, niveaux, x_fen, y_fen, images["mur"])
+                                if i_niv+1 < 2:
+                                        balle = fauxBalles(balle)
+                                        balle = supprimerElements(balle)
+                                        niveau, i_niv = chargerNiveau(i_niv+1, niveaux, x_fen, y_fen, images["mur"])
+                                else:
+                                        etat = "win"
+                                        i_niv = 0
+                                        niveau, i_niv = chargerNiveau(i_niv+1, niveaux, x_fen, y_fen, images["mur"])
                                 trou = supprimerElements(trou)
 
                 for t in tiles:
@@ -281,6 +314,7 @@ while continuer:
 
                 for e in ennemies:
                         e.afficher(fenetre)
+<<<<<<< HEAD
                         if e.collide(perso):
                             perso.alive = False
                         if e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y):
@@ -288,6 +322,8 @@ while continuer:
 
                 for t in tire:
                         t.afficher(fenetre)
+=======
+>>>>>>> master
                         e.deplacer(niveau, fenetre, perso.rect.x, perso.rect.y,)
                         if perso.collide(e):
                                 etat = "perdu"
@@ -300,7 +336,6 @@ while continuer:
                         for e in ennemies:
                             if t.collide(e):
                                 e.alive = False
-
                         t.Tire(x_fen, y_fen)
 
 
@@ -311,15 +346,14 @@ while continuer:
                 if perso.PixToCase(niveau) == 3:
                         print("push")
 
+<<<<<<< HEAD
                 if not perso.isAlive():
+=======
+                if touches[pygame.K_ESCAPE]:
+>>>>>>> master
                         etat = "perdu"
                         text = ''
-
-        elif etat == "menu" or etat == "classement": 
-            etat, dicoMenu = menuJeu(fenetre, etat, blur, x_fen, y_fen, sTxt, menuFont, dicoMenu) 
-        elif etat == "editeur": 
-            exec(open("Editeur.py").read()) 
-
+                        changementSon = True
         if etat == "win":
                 if changementSon:
                         changerSon(sonMenu)
@@ -336,7 +370,7 @@ while continuer:
         if etat == "recommencer":
                 ennemies = []
                 perso, score, ennemies = recommencer(perso, score, niveau, ennemies)
-                etat = "jeu"
+                etat = "menu"
                 changementSon = True
 
         ######################################
@@ -349,10 +383,16 @@ while continuer:
         pygame.display.flip()
 
         for event in pygame.event.get():
+<<<<<<< HEAD
             tire, images, score = perso.shoot(touches, event, tire, images, score)
             if event.type == pygame.QUIT or etat == "quitter":
                     continuer = 0
         if continuer == 0 and score > int(topScore[0]):
             sauverScore(score)
+=======
+                tire, images, score = perso.shoot(touches, event, tire, images, score)
+                if event.type == pygame.QUIT or etat == "quitter":
+                        continuer = 0
+>>>>>>> master
 
 pygame.quit()
